@@ -1,0 +1,58 @@
+#log-form{
+    width:412px;
+    margin:10vh auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    background: rgba(0, 0, 0, 0.3);
+}
+#log-form form {
+    width: 100%;
+    max-width: 410px;
+    padding: 15px;
+    margin: auto;
+}
+#log-form .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+#log-form .form-control:focus { z-index: 2; }
+#log-form .form-signin input[type="email"] {
+
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+#log-form .form-signin input[type="password"] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#log-form a{
+    display: block;
+    padding-top:10px;
+    color:wheat;
+}
+
+#log-form .lines{
+    width:200px;
+    border:1px solid red;
+}
+#log-form button[type="submit"]{ margin-top:10px; }
+img.bg {
+    /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 1024px;
+
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}

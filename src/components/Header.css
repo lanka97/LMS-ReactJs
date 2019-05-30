@@ -1,0 +1,13 @@
+.navbar,
+.navbar-default {
+    background-image: linear-gradient(to bottom,#0572d8 0,#0572d8 100%) !important; /* override background image gradient w/ flat color */
+}
+.navItem {
+    color: white;
+    font-weight: bold;
+}
+#nav-dropdown{
+    color: white;
+    font-weight: bold;
+    background-color: red;
+}
