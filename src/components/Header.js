@@ -21,9 +21,16 @@ export class Header extends React.Component {
     if (this.state.user) {
       return (<div>{this.state.user}</div>);
     } else {
-      return (<Link to='/login'>
-        <button className='btn btn-primary' >xxxx </button>
-      </Link>);
+      return (
+        <div>
+          <Link to='/login'>
+            <button className='btn btn-primary mr-3' >Login </button>
+          </Link>
+          <Link to='/signup'>
+            <button className='btn btn-primary' >Signup </button>
+          </Link>
+        </div>
+      );
     }
   }
 

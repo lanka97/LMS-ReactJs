@@ -12,7 +12,50 @@ export default class Dashboard extends Component {
         this.state = {
             showA: true,
             showB: true,
+            students: [],
+            instructors: []
         };
+    }
+
+    componentDidMount() {
+
+        console.log('dsdd');
+        const studenttemp = [];
+        const instTemp = [];
+
+        for (let i = 1; i <= 10; i++) {
+
+            studenttemp.push(
+                <tr key={i}>
+                    <td>{i}</td>
+                    <td>John Doe</td>
+                    <td>2019/06/06</td>
+                    <td>Computing</td>
+                    <td>Yes</td>
+                </tr>
+            );
+
+        }
+
+        for (let i = 1; i <= 10; i++) {
+
+            instTemp.push(
+                <tr key={i}>
+                    <td>{i}</td>
+                    <td>Luke Coleman</td>
+                    <td>2019/06/06</td>
+                    <td>Software Engineering</td>
+                    <td>Yes</td>
+                </tr>
+            );
+
+        }
+
+        this.setState({
+            students: studenttemp,
+            instructors: instTemp
+        });
+
     }
 
 
@@ -59,9 +102,11 @@ export default class Dashboard extends Component {
             maintainAspectRation: true
         };
 
+
+
         return (
 
-            <Container fluid={1} style={{fontSize: '14px'}}>
+            <Container fluid={1} style={{ fontSize: '14px' }}>
                 <Row>
                     <SideBar />
                     <Col style={{ padding: 0 }}>
@@ -86,70 +131,6 @@ export default class Dashboard extends Component {
                                     <Card bg="danger" body>
                                         <h1>2</h1>
                                         <h4>Admins</h4>
-                                    </Card>
-                                </Col>
-                            </Row>
-
-                            <Row style={{ marginTop: '50px' }}>
-                                <Col md={6}>
-                                    <Card>
-                                        <Card.Header>Latest 10 Students</Card.Header>
-                                        <Card.Text style={{ padding: '10px' }}>
-                                            <Table striped bordered hover size="sm">
-                                                <tr className="bg-dark text-white">
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Joined</th>
-                                                    <th>Faculty</th>
-                                                    <th>Verified</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>1</th>
-                                                    <td>John Doe</td>
-                                                    <td>2019/06/06</td>
-                                                    <td>Computing</td>
-                                                    <td>Yes</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>2</th>
-                                                    <td>John Doe</td>
-                                                    <td>2019/06/06</td>
-                                                    <td>Computing</td>
-                                                    <td>Yes</td>
-                                                </tr>
-                                            </Table>
-                                        </Card.Text>
-                                    </Card>
-                                </Col>
-
-                                <Col md={6}>
-                                    <Card>
-                                        <Card.Header>Latest 10 Instructors</Card.Header>
-                                        <Card.Text style={{ padding: '10px' }}>
-                                            <Table striped bordered hover size="sm">
-                                                <tr className="bg-dark text-white">
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Joined</th>
-                                                    <th>Faculty</th>
-                                                    <th>Verified</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>1</th>
-                                                    <td>John Doe</td>
-                                                    <td>2019/06/06</td>
-                                                    <td>Computing</td>
-                                                    <td>Yes</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>2</th>
-                                                    <td>John Doe</td>
-                                                    <td>2019/06/06</td>
-                                                    <td>Computing</td>
-                                                    <td>Yes</td>
-                                                </tr>
-                                            </Table>
-                                        </Card.Text>
                                     </Card>
                                 </Col>
                             </Row>
@@ -184,6 +165,51 @@ export default class Dashboard extends Component {
                                 </Col>
                             </Row>
 
+                            <Row style={{ marginTop: '50px' }}>
+                                <Col md={6}>
+                                    <Card>
+                                        <Card.Header>Latest {this.state.students.length} Students</Card.Header>
+                                        <Card.Text style={{ padding: '10px' }}>
+                                            <Table striped bordered hover size="sm">
+                                                <tbody>
+                                                    <tr className="bg-dark text-white">
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Joined</th>
+                                                        <th>Faculty</th>
+                                                        <th>Verified</th>
+                                                    </tr>
+
+                                                    {this.state.students}
+
+                                                </tbody>
+                                            </Table>
+                                        </Card.Text>
+                                    </Card>
+                                </Col>
+
+                                <Col md={6}>
+                                    <Card>
+                                        <Card.Header>Latest {this.state.instructors.length} Instructors</Card.Header>
+                                        <Card.Text style={{ padding: '10px' }}>
+                                            <Table striped bordered hover size="sm">
+                                                <tbody>
+                                                    <tr className="bg-dark text-white">
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Joined</th>
+                                                        <th>Department</th>
+                                                        <th>Verified</th>
+                                                    </tr>
+
+                                                    {this.state.instructors}
+
+                                                </tbody>
+                                            </Table>
+                                        </Card.Text>
+                                    </Card>
+                                </Col>
+                            </Row>
 
                         </Container>
                     </Col>

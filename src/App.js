@@ -34,7 +34,8 @@ export class App extends React.Component {
             <Route path="/" component={Header} />
             <Route exact path='/' component={Home} />
             <Route exact path='/home' component={Home} />
-            <Route path='/login' component={Signin} />
+            <Route exact path='/login' component={Signin} />
+            <Route path='/sidebar' component={SideBar} />
             <Route exact path='/admin/dashboard' component={Dashboard} />
             <Route exact path='/admin/users' component={AddUser} />
           </div>
