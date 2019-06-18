@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, BrowserRouter } from 'react-router-dom';
+import AssingmentMain from './components/Assingments/AssingmentMain'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -28,6 +29,7 @@ export class App extends React.Component {
             <Route path="/" component={Header} />
             <Route exact path='/' component={Home} />
             <Route exact path='/home' component={Home} />
+            <Route exact path='/assingments' component={AssingmentMain} />
             <Route path='/login' component={Signin} />
           </div>
         </BrowserRouter>
