@@ -14,6 +14,7 @@ import Button from 'react-bootstrap/Button'
 import {HashLoader as Spinner} from 'react-spinners';
 
 var regexp = /^\d+(\.\d{1,2})?$/;
+
 class viewAllSubmissions extends Component{
 
     constructor(props){
