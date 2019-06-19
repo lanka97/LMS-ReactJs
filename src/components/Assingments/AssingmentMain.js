@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../CSS/assingment.css'
 import { Button, Modal } from 'react-bootstrap';
 import AddAssingment from '../Assingments/AddAssingment';
+import UpdateAssingment from '../Assingments/UpdateAssingment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
@@ -32,14 +33,13 @@ export class AssingmetsMain extends React.Component {
         this.setState({ show: false });
     }
 
-
     render() {
         return (
             <div className="main">
                 <div className="header">
                     Assignment
-              <hr />
                     <Button className="btn btn-primary" onClick={this.handleShow}>+ Add Assignments</Button>
+              <hr />
                 </div>
 
                 <Modal
@@ -54,7 +54,7 @@ export class AssingmetsMain extends React.Component {
                 <Modal.Header closeButton>
                     <Modal.Title>Add Assingment</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><AddAssingment></AddAssingment></Modal.Body>
+                <Modal.Body><AddAssingment onclose = {this.handleClose}></AddAssingment></Modal.Body>
                 {/* <Modal.Footer>
                     <Button variant="secondary" className="btn btn-danger" onClick={this.handleClose}>
                     Close
@@ -64,6 +64,8 @@ export class AssingmetsMain extends React.Component {
                     </Button>
                 </Modal.Footer> */}
                 </Modal>
+
+                <UpdateAssingment onclose = {this.handleClose}></UpdateAssingment>
             </div>
         );
     }

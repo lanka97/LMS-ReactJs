@@ -15,11 +15,23 @@ export class AddAssingmets extends React.Component{
         this.state = {
             startDate: new Date(),
         };
+
+        this.handleClose.bind(this);
+
+        console.log(props.onclose);
     }
 
     handleChange (e) { 
         this.setState({startDate: e});
       }
+
+    handleClose() {
+        this.props.onclose();
+    }
+
+    handleSave() {
+        this.props.onclose();
+    }
 
     render(){
     return (
@@ -65,8 +77,8 @@ export class AddAssingmets extends React.Component{
                     </td>
                     <td>
                         <div className="form-group"> 
-                        <input type="file" className="form-control" ref = "AssingmentName" />
-                        <small className="form-text text-muted">Upload the file with the Details Reduding the Assingment</small>
+                        <input type="file" class="form-control-file" ref = "AssingmentName" />
+                        <small className="form-text text-muted">Upload the file with the Details Regarding the Assingment</small>
                         </div>
                     </td>
                 </tr>
@@ -85,7 +97,7 @@ export class AddAssingmets extends React.Component{
                                 value = {this.state.startDate}
                                 minDate = {new Date()}
                                 onChange={this.handleChange.bind(this)}
-                                dateFormat="dd/mm/yyyy" ref = "deadLine"/><br/> </div>
+                                dateFormat="dd/MM/yyyy" ref = "deadLine"/><br/> </div>
                     </td>
                 </tr>
              </tbody>
@@ -94,16 +106,18 @@ export class AddAssingmets extends React.Component{
 
         <br/>
         <div className= "formFooter">
-            <Button variant="secondary" className = "btn btn-danger"  onClick={this.handleClose}>
+            <Button variant="secondary" className = "btn btn-danger"  onClick={() => {this.handleClose()}}>
                     Close
             </Button>
             
-            <Button variant="primary" onClick={this.handleClose}>
+            <Button variant="primary" onClick={() => {this.handleSave()}}>
                     Save Changes
             </Button></div>
         </div>
     );
     }
 }
+
+
 
 export default AddAssingmets;
