@@ -61,6 +61,9 @@ export class Header extends React.Component {
             <Nav className="mr-auto">
               <Nav.Link href="/home" > <span className="navItem">Home</span></Nav.Link>
               <Nav.Link href="/link"> <span className="navItem">Link</span></Nav.Link>
+              <Nav.Link href="/AddCourse"> <span className="navItem">Add Course</span></Nav.Link>
+              <Nav.Link href="/EditCourse"> <span className="navItem">Edit Course</span></Nav.Link>
+              <Nav.Link href="/Courses"> <span className="navItem">Courses</span></Nav.Link>
               {this.navbarItems()}
               <NavDropdown title="Dropdown" id="nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
