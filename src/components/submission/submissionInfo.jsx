@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table'
 import {Link} from "react-router-dom";
 import moment from "moment";
 import Alert from 'react-bootstrap/Alert'
-import {fn_getSpecificSubmissionInfo} from "../functions/submission";
+import {fn_getSpecificSubmissionInfo, fn_updateAssignmentMarks} from "../functions/submission";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
@@ -62,8 +62,19 @@ class submissionInfo extends Component{
 
         fn_getSpecificSubmissionInfo(payload)
             .then(data=>{
+
                 clearInterval(this.timer);
                 data = data.data;
+
+                //set viewed
+
+                if(data.marks !==0){
+                    let payload = new FormData();
+                    payload.set('marks',data.marks);
+                    payload.set('isViewed','true');
+
+                    fn_updateAssignmentMarks(data.id,payload).then();
+                }
 
                 //set submitted time
                 let end = moment(this.state.dueDate,'DD/MM/YYYY');

@@ -79,6 +79,7 @@ class viewAllSubmissions extends Component{
 
         let payload = new FormData();
         payload.set('marks',this.state.mark);
+        payload.set('isViewed','false');
 
         let id = this.state.update.id;
 

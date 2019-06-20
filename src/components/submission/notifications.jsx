@@ -1,0 +1,63 @@
+import React,{Component} from 'react'
+import {fn_getAssignmentsByStudentID} from "../functions/submission";
+import {ScaleLoader as Loader} from 'react-spinners';
+
+class notifications extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            submissions:[],
+            isLoading:true
+        }
+    }
+
+    componentDidMount() {
+        let studentID = "IT17102674";
+        fn_getAssignmentsByStudentID(studentID)
+            .then(data=>{
+                this.setState({
+                    submissions:data.data,
+                    isLoading:false
+                })
+            })
+    }
+
+    render() {
+        let loader = (
+            <div className="center-screen">
+                <Loader
+                    size={250}
+                    color={'#123abc'}
+                    loading={this.state.isLoading}
+                    />
+                    <h5>Loading...</h5>
+            </div>
+        );
+        return(
+            <div className="container">
+                {this.state.isLoading? loader
+                    :
+
+                    this.state.submissions.map((value, index, array) => {
+
+                        if(value.marks ===0)
+                            return false;
+
+                        return(
+                            <a href={`/course/${value.courseId}/assignment/${value.assigmentName}/status`} className="text-decoration-none" key={index}>
+                                <div className={value.viewed ? 'card mt-3 bg-default' : 'card mt-3 bg-light'} >
+                                    <div className="card-body text-dark">
+                                        Your <span className="font-weight-bold">{value.courseId}</span> module's <span className="font-weight-bold">{value.assigmentName}</span> marks have updated
+                                    </div>
+
+                                </div>
+                            </a>
+                        )
+                    })
+                }
+            </div>
+        )
+    }
+}
+export default notifications;

@@ -29,3 +29,7 @@ export const fn_getAllSubmissionByCourseAndAssignment = async (courseID,assignme
 export const fn_updateAssignmentMarks = async (submissionID,data) =>{
     return await axios.put(`http://localhost:8080/lms/submission/${submissionID}`,data,headers);
 };
+
+export const fn_getAssignmentsByStudentID = async  (studentID) =>{
+    return await axios.get(`http://localhost:8080/lms/submission/student/${studentID}`)
+};
