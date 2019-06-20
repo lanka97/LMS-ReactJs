@@ -1,25 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
 
 import './Header.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Signin from './signin';
-
-export class Header extends React.Component {
+export class Header extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
-      user: props.user
+      username: ''
     }
   }
+
+  componentDidMount() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.setState({
+        username: user.username
+      })
+    }
+
+  }
+
   showSinginButton() {
-    console.log(this.state.user);
-    if (this.state.user) {
-      return (<div>{this.state.user}</div>);
+    //console.log(this.state.user.username);
+    if (localStorage.getItem('user')) {
+
+      return (
+        <Navbar>
+          <Nav>
+            <NavDropdown title={this.state.username} id="nav-dropdown" className="active">
+              <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Settings</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+
+          <button className='btn btn-primary ml-3' onClick={this.onLogout}>Logout </button>
+
+        </Navbar>);
     } else {
       return (
         <div>
@@ -42,7 +63,7 @@ export class Header extends React.Component {
   routeChange() {
     let path = '/login';
     console.log(path);
-    this.props.history.push({ Signin });
+    this.props.history.push('/login');
   }
 
   navbarItems() {
@@ -54,6 +75,11 @@ export class Header extends React.Component {
     else {
 
     }
+  }
+
+  onLogout() {
+    localStorage.clear();
+    this.props.history.push('/');
   }
 
   render() {
