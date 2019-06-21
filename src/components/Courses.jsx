@@ -2,12 +2,11 @@ import React, {Component} from 'react'
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBCardText, MDBCardTitle, Button } from 'mdbreact';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
-
+import SweetAlert from 'sweetalert2';
 
 import {Link} from "react-router-dom";
 import '../CSS/course.css';
 
-import AddCourse from './AddCourse';
 
 
 class Courses extends Component {
@@ -16,13 +15,34 @@ class Courses extends Component {
         super(props, context);
         this.state={
            courses:[],
-           show: false,
-           rowId: ''
+           course: '',
+           showDelete: false,
+           showView: false,
+           showUpdate: false,
+           rowId: '',
+           course_id: '',
+           name: '',
+           description: '',
+           enroll_key: '',
+           credits: '',
+           faculty: '',
+           department: '',
+           instructor_id: '',
+           status: ''
         };
 
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
+        this.handleDeleteShow = this.handleDeleteShow.bind(this);
+        this.handleDeleteClose = this.handleDeleteClose.bind(this);
+        this.deleteCourse = this.deleteCourse.bind(this);
+        this.handleViewShow = this.handleViewShow.bind(this);
+        this.handleViewClose = this.handleViewClose.bind(this);
+        this.handleUpdateShow = this.handleUpdateShow.bind(this);
+        this.handleUpdateClose = this.handleUpdateClose.bind(this);
+        this.updateCourse =this.updateCourse.bind(this);
+    }
 
+    componentWillReceiveProps(){
+        this.componentDidMount();
     }
 
     componentDidMount() {
@@ -43,9 +63,9 @@ class Courses extends Component {
                                 <b>Department : </b>{course.department}<br/>
                                 {course.description}
                                 </MDBCardText>
-                                <Button color="primary">View Course</Button>
-                                <Button color="success">Edit Course</Button>
-                                <Button color="danger" onClick={()=>this.handleShow(course.id)}>Delete Course</Button>
+                                <Button className="button-margin" color="primary" onClick={()=>this.handleViewShow(course.id)}>View Course</Button>
+                                <Button className="button-margin" color="success" onClick={()=>this.handleUpdateShow(course.id)}>Edit Course</Button>
+                                <Button className="button-margin" color="danger" onClick={()=>this.handleDeleteShow(course.id)}>Delete Course</Button>
                             </MDBCardBody>
                         </MDBCard>
                         <br/>
@@ -60,16 +80,136 @@ class Courses extends Component {
 
     deleteCourse(id){
         console.log("delete", id);
+        fetch('http://localhost:8080/lms/course/remove/'+id, {method:'DELETE'})
+        .then(res => res.json())
+        .then(_data =>{
+            SweetAlert.fire({
+                title: "Success!!",
+                text: "Selected course deleted successfully",
+                type: "success",
+                timer: 10000,
+                showConfirmButton: true
+            });
+            this.handleDeleteClose();
+            this.componentDidMount();
+        })
     }
 
-    handleClose() {
-        this.setState({ show: false });
+    getCourseById(id){
+        fetch('http://localhost:8080/lms/course/getbyid/'+id, {method:"GET"})
+        .then(res => res.json())
+        .then(_course=>{
+            this.setState({
+                course: _course,
+                course_id: this.state.course.course_id,
+                name: this.state.course.name,
+                description: this.state.course.description,
+                enroll_key: this.state.course.enroll_key,
+                credits: this.state.course.credits,
+                faculty: this.state.course.faculty,
+                department: this.state.course.department,
+                instructor_id: this.state.course.instructor_id,
+                status: this.state.course.status
+            });
+            console.log(this.state.course);
+        });
+    }
+
+    updateCourse(){
+        const body = {
+            course_id: this.state.course.course_id,
+            name: this.state.course.name,
+            description: this.refs.description.value,
+            enroll_key: this.refs.enrollkey.value,
+            credits: this.refs.credits.value,
+            faculty: this.refs.faculty.value,
+            department: this.refs.department.value,
+            instructor_id: this.refs.instructor_id.value,
+            status: this.state.course.status
+        };
+
+        fetch('http://localhost:8080/lms/course/update/'+this.state.rowId, {
+            method: "PUT",
+            body: JSON.stringify(body),
+            headers :{
+                "Content-Type": "application/json"
+            }
+        }).then(res =>{
+            SweetAlert.fire({
+                title: "Success!!",
+                text: "Course updated successfully",
+                type: "success",
+                timer: 10000,
+                showConfirmButton: true
+            });
+            this.handleUpdateClose();
+            this.componentDidMount();
+        }).catch(err =>{
+            console.log(err);
+        });
+    }
+
+    handleDeleteClose() {
+        this.setState({ showDelete: false });
     }
     
-    handleShow(id) {
+    handleDeleteShow(id) {
         this.setState({ 
-            show: true,
+            showDelete: true,
             rowId: id 
+        });
+
+
+    }
+
+    handleViewClose() {
+        this.setState({ showView: false });
+    }
+    
+    handleViewShow(id) {
+        this.setState({ 
+            showView: true
+        });
+        this.getCourseById(id);
+    }
+
+    handleUpdateClose() {
+        this.setState({ showUpdate: false });
+    }
+    
+    handleUpdateShow(id) {
+        fetch('http://localhost:8080/lms/course/getbyid/'+id, {method:"GET"})
+        .then(res => res.json())
+        .then(_course=>{
+            this.setState({
+                course: _course,
+                course_id: this.state.course.course_id,
+                name: this.state.course.name,
+                description: this.state.course.description,
+                enroll_key: this.state.course.enroll_key,
+                credits: this.state.course.credits,
+                faculty: this.state.course.faculty,
+                department: this.state.course.department,
+                instructor_id: this.state.course.instructor_id,
+                status: this.state.course.status
+            });
+            console.log(this.state.course);
+        }).then(
+            this.setState({ 
+                showUpdate: true,
+                rowId: id
+            })
+        );
+    }
+
+    handleInputChange(e) {
+        this.setState({
+          description: e.target.description,
+          enroll_key: e.target.enroll_key,
+          credits: e.target.credits,
+          faculty: e.target.faculty,
+          department: e.target.department,
+          instructor_id: e.target.instructor_id
         });
     }
 
@@ -87,20 +227,93 @@ class Courses extends Component {
 
                     
 
-                <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal show={this.state.showDelete} onHide={this.handleDeleteClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Delete Course</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!{this.state.rowId}</Modal.Body>
+                <Modal.Body><b>Do you want to delete this course..?</b></Modal.Body>
                 <Modal.Footer>
-                    <Button color="primary" onClick={this.handleClose}>
+                    <Button color="primary" onClick={this.handleDeleteClose}>
                     Cancel
                     </Button>
                     <Button color="danger" onClick={()=>this.deleteCourse(this.state.rowId)}>
                     Delete Course
                     </Button>
                 </Modal.Footer>
-                </Modal>    
+                </Modal> 
+
+                <Modal show={this.state.showView} onHide={this.handleViewClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+                    <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        {this.state.course.name}
+                    </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    <h5><b>Course Name : </b>{this.state.course.name}</h5>
+                    <h5><b>Course ID : </b>{this.state.course.course_id}</h5>
+                    <h5><b>Faculty : </b>{this.state.course.faculty}</h5>
+                    <h5><b>Department : </b>{this.state.course.department}</h5>
+                    <h5><b>Description : </b>{this.state.course.description}</h5>
+                    <h5><b>Credits : </b>{this.state.course.credits}</h5>
+                    <h5><b>Enrollment Key : </b>{this.state.course.enroll_key}</h5>
+                    <h5><b>Status :</b>{this.state.course.status}</h5>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    <Button color="primary" onClick={this.handleViewClose}>Close</Button>
+                    </Modal.Footer>
+                </Modal>   
+
+                <Modal show={this.state.showUpdate} onHide={this.handleUpdateClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+                    <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Update Course
+                    </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form>
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Course ID</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" value={this.state.course_id} ref="id"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Course Name</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" value={this.state.name} ref="name"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Course Description</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" value={this.state.description} onChange={e => this.handleInputChange(e)} ref="description"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Enrollment Key</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" value={this.state.enroll_key} onChange={e => this.handleInputChange(e)} ref="enrollkey"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Credits</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" value={this.state.credits} onChange={e => this.handleInputChange(e)} ref="credits"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Select Faculty</label>
+                            <br />
+                            <select value={this.state.faculty} onChange={e => this.handleInputChange(e)} ref="faculty">
+                                <option value="Computing">Computing</option>
+                                <option value="Business">Business</option>
+                                <option value="Engineering">Engineering</option>
+                            </select>
+                            <br />
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Select Instructor</label>
+                            <br />
+                            <select value={this.state.instructor_id} onChange={e => this.handleInputChange(e)} ref="instructor_id">
+                                <option value="Ins1">Ins1</option>
+                                <option value="Ins2">Ins2</option>
+                            </select>
+                            <br />
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Department</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" value={this.state.department} onChange={e => this.handleInputChange(e)} ref="department"/>    
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    <div className="text-center mt-4">
+                            <MDBBtn className="button-margin" color="danger" onClick={this.handleUpdateClose}>Cancel</MDBBtn>
+                            <MDBBtn color="primary" className="button-margin" onClick={this.updateCourse}>Update</MDBBtn>
+                    </div>
+                    </Modal.Footer>
+                </Modal> 
             </div>
         );
     }

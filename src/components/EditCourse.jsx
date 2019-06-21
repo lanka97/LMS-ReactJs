@@ -118,8 +118,8 @@ class EditCourse extends Component {
                             <input type="text" id="defaultFormRegisterNameEx" className="form-control" value={this.state.department} onChange={e => this.handleInputChange(e)} ref="department"/>
                             
                             <div className="text-center mt-4">
-                                <MDBBtn color="primary" onClick={this.addCourse}>Create</MDBBtn>
-                                <Link to='/Courses'><MDBBtn color="danger">Cancel</MDBBtn></Link>
+                            <Link to='/Courses'><MDBBtn className="button-margin" color="danger">Cancel</MDBBtn></Link>
+                            <MDBBtn color="primary" className="button-margin" onClick={this.addCourse}>Create</MDBBtn>
                             </div>
                         </form>
                         </MDBCol>

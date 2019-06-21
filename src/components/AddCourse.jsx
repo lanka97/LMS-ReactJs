@@ -5,14 +5,14 @@ import SweetAlert from 'sweetalert2';
 import {Link} from "react-router-dom";
 import '../CSS/course.css';
 
-
+import Courses from './Courses';
 
 class AddCourse extends Component {
 
     constructor(props){
         super(props);
         this.state={
-           
+           faculty:''
         };
         this.addCourse = this.addCourse.bind(this);
 
@@ -48,9 +48,17 @@ class AddCourse extends Component {
                 timer: 10000,
                 showConfirmButton: true
             });
+            this.props.history.push('/Courses')
         }).catch(err =>{
             console.log(err);
         });
+    }
+
+    getInstructor(e){
+        this.setState({
+            faculty: e.target.faculty
+        });
+        console.log("faculty",this.state.faculty);
     }
 
     render() {
@@ -79,9 +87,9 @@ class AddCourse extends Component {
                             <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Select Faculty</label>
                             <br />
                             <select ref="faculty">
-                                <option value="Computing">Computing</option>
-                                <option value="Bussiness">Business</option>
-                                <option value="Engineering">Engineering</option>
+                                <option value="Computing" onChange={e =>this.getInstructor(e)}>Computing</option>
+                                <option value="Bussiness" onChange={e =>this.getInstructor(e)}>Business</option>
+                                <option value="Engineering" onChange={e =>this.getInstructor(e)}>Engineering</option>
                             </select>
                             <br />
                             <br />
@@ -97,8 +105,8 @@ class AddCourse extends Component {
                             <input type="text" id="defaultFormRegisterNameEx" className="form-control" ref="department"/>
                             
                             <div className="text-center mt-4">
-                            <MDBBtn color="primary" onClick={this.addCourse}>Create</MDBBtn>
-                            <Link to='/Courses'><MDBBtn color="danger">Cancel</MDBBtn></Link>
+                            <Link to='/Courses'><MDBBtn className="button-margin" color="danger">Cancel</MDBBtn></Link>
+                            <MDBBtn color="primary" className="button-margin" onClick={this.addCourse}>Create</MDBBtn>
                             </div>
                         </form>
                         </MDBCol>
