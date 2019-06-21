@@ -15,17 +15,59 @@ import AddUser from './components/admin/AddUser';
 
 import './App.css';
 
-// function logout(){
-//   <Route>
+const user = JSON.parse(localStorage.getItem('user'));
 
-//   </Route>
-// }
-
-function ProtectedRoute({ component: Component, ...rest }) {
+function AdminRoute({ component: Component, ...rest }) {
   return (
     <Route {...rest} render={props => {
 
-      if (localStorage.getItem('user')) {
+      if (user && user.type == "ADMIN") {
+        return <Component {...props} />;
+      } else {
+        return (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: {
+                from: props.location
+              }
+            }}
+          />
+        );
+      }
+    }}
+    />
+  );
+}
+
+function StudentRoute({ component: Component, ...rest }) {
+  return (
+    <Route {...rest} render={props => {
+
+      if (user && user.type == "STUDENT") {
+        return <Component {...props} />;
+      } else {
+        return (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: {
+                from: props.location
+              }
+            }}
+          />
+        );
+      }
+    }}
+    />
+  );
+}
+
+function InstructorRoute({ component: Component, ...rest }) {
+  return (
+    <Route {...rest} render={props => {
+
+      if (user && user.type == "INSTRUCTOR") {
         return <Component {...props} />;
       } else {
         return (
@@ -48,7 +90,7 @@ function GuestRoute({ component: Component, ...rest }) {
   return (
     <Route {...rest} render={props => {
 
-      if (localStorage.getItem('user')) {
+      if (user) {
         return (
           <Redirect
             to={{
@@ -100,10 +142,11 @@ export class App extends Component {
             <Route exact path='/home' component={Home} />
             <GuestRoute exact path='/login' component={Login} />
             <GuestRoute exact path='/signup' component={Signup} />
-            <Route exact path="/user/verify" component={VerifyMail} />
+            <GuestRoute exact path="/user/verify" component={VerifyMail} />
+            <AdminRoute exact path='/admin/dashboard' component={Dashboard} />
+            <AdminRoute exact path='/admin/users/students' component={AddUser} />
+
             <Route path='/sidebar' component={SideBar} />
-            <ProtectedRoute exact path='/admin/dashboard' component={Dashboard} />
-            <Route exact path='/admin/users/students' component={AddUser} />
 
           </div>
         </BrowserRouter>
