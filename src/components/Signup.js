@@ -4,7 +4,7 @@ import { Container, Form, Col, InputGroup, Button, Card, ToggleButtonGroup, Togg
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock, faEnvelope, faPhone, faMale, faFemale } from '@fortawesome/free-solid-svg-icons';
 
-import { registerUser, getUsers } from '../services/userServices';
+import { registerUser, getUsers, sendVerifyMail, getUserByUsername } from '../services/userServices';
 
 export default class Signup extends Component {
 
@@ -15,12 +15,15 @@ export default class Signup extends Component {
     this.handleFaculty = this.handleFaculty.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
     this.validateUser = this.validateUser.bind(this);
+    this.getUser = this.getUser.bind(this);
+    this.sendEmail = this.sendEmail.bind(this);
     this.displayError = this.displayError.bind(this);
 
     this.state = {
       validated: false,
       usernames: [],
       emails: [],
+      id: '',
       firstname: '',
       lastname: '',
       email: '',
@@ -129,7 +132,59 @@ export default class Signup extends Component {
         console.log(res);
         if (res) {
           this.setState({ message: res.message });
-          this.props.history.push('/login');
+          localStorage.setItem('tempUsername', JSON.stringify(user.username));
+          setTimeout(this.getUser(user.username), 1000);
+          this.props.history.push('/user/verify');
+        } else {
+          this.setState({ message: 'Something went wrong' });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        err = err.response.data
+        this.setState({
+          message: err.message
+        });
+      });
+  }
+
+  getUser(username) {
+
+    getUserByUsername(username)
+      .then(res => {
+        console.log(res.data);
+        if (res) {
+          res = res.data;
+          this.setState({
+            message: res.message,
+            id: res.user._id,
+            email: res.user.email
+          });
+
+          this.sendEmail(res.user._id);
+
+        } else {
+          this.setState({ message: 'Something went wrong' });
+        }
+      })
+      .catch(err => {
+        err = err.response.data;
+        this.setState({
+          error: true,
+          message: err.message
+        });
+      });
+  };
+
+
+  sendEmail(userId) {
+
+    sendVerifyMail(userId)
+      .then(res => {
+        res = res.data;
+        console.log(res);
+        if (res) {
+          this.setState({ message: res.message });
         } else {
           this.setState({ message: 'Something went wrong' });
         }
@@ -140,11 +195,13 @@ export default class Signup extends Component {
           message: err.message
         });
       });
+
   }
+
 
   handleSubmit(event) {
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (form.checkValidity() === false && this.state.error) {
       event.preventDefault();
       event.stopPropagation();
       this.setState({ validated: true });

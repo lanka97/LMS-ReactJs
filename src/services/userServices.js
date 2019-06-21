@@ -34,6 +34,39 @@ export const getUsers = () => {
 
 };
 
+
+export const getUserById = (userId) => {
+
+    return axios({
+        method: 'GET',
+        url: apiNodeURL + '/id/' + userId,
+        config: {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+    })
+
+};
+
+
+export const getUserByUsername = (username) => {
+
+    return axios({
+        method: 'GET',
+        url: apiNodeURL + '/username/' + username,
+        config: {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+    })
+
+};
+
+
 export const registerUser = (user) => {
 
     return axios({
@@ -49,42 +82,34 @@ export const registerUser = (user) => {
     })
 };
 
+export const sendVerifyMail = (userId) => {
 
-// export const loginUser = (user) => {
-
-//     return fetch(apiBaseURL + 'login', {
-//         method: 'POST',
-//         body: JSON.stringify(user),
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Accept': 'application/json'
-//         }
-//     })
-// };
-
-
+    return axios({
+        method: 'GET',
+        url: apiNodeURL + '/verify/send/' + userId,
+        config: {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+    })
+};
 
 
-// export const loginUser = (user) => {
+export const verifyUser = (userId, code) => {
 
-//     return axios.post(apiBaseURL, {
-//         username: user.username,
-//         password: user.password
-//     },
-//         {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Accept': 'application/json'
-//             }
-//         });
-// };
+    return axios({
+        method: 'POST',
+        url: apiNodeURL + '/verify/' + userId,
+        data: code,
+        config: {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+    })
+};
 
-// class UserService{
 
-//     userLogin(){
-
-//     }
-
-// }
-
-// export default new UserService();

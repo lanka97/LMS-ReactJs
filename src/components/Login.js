@@ -68,6 +68,7 @@ export default class Login extends Component {
       })
       .catch(err => {
         err = err.response.data;
+        localStorage.setItem('tempUsername', JSON.stringify(user.username));
         this.setState({
           error: true,
           message: err.message
