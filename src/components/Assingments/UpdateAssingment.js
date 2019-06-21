@@ -72,7 +72,7 @@ export class UpdateAssingmets extends React.Component{
               </td>
               <td>
                   <div className="form-group"> 
-                  <input type="file" class="form-control-file" ref = "AssingmentName" />
+                  <input type="file" className="form-control-file" ref = "AssingmentName" />
                   <small className="form-text text-muted">Upload the file with the Details Regarding the Assingment</small>
                   </div>
               </td>

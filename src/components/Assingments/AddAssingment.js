@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 // import { Form } from 'react-bootstrap';
 
 
-export class AddAssingmets extends React.Component{
+export class AddAssingmets extends React.Component {
 
     constructor(props, context) {
         super(props, context);
@@ -21,9 +21,9 @@ export class AddAssingmets extends React.Component{
         console.log(props.onclose);
     }
 
-    handleChange (e) { 
-        this.setState({startDate: e});
-      }
+    handleChange(e) {
+        this.setState({ startDate: e });
+    }
 
     handleClose() {
         this.props.onclose();
@@ -33,88 +33,103 @@ export class AddAssingmets extends React.Component{
         this.props.onclose();
     }
 
-    render(){
-    return (
-        <div>
-            <form>
-            <table>
-              <tbody>
-                <tr>
-                    <td>
-                        <div className="form-group"> 
-                            <label>Course Name:</label>
-                        </div>
-                    </td>
-                    <td>
-                        <div className="form-group"> 
-                            <select ref = "courseName">
-                                <option value="Sex Educetion" >Educeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetion</option>
-                                <option value="Sex Educetion" >Educeetion</option>
-                            </select>
-                        </div>
-                    </td>
-                </tr>
+    onFileUpload(event) {
+        console.log(event.target.files);
+        this.setState({
+            File: event.target.files
+        });
+    }
 
-                <tr>
-                    <td>
-                        <div className="form-group"> 
-                            <label>Assingment Name:</label>
-                        </div>
-                    </td>
-                    <td>
-                        <div className="form-group"> 
-                        <input type="email" className="form-control" ref = "AssingmentName" placeholder="Enter Assingment Name"/>
-                        <small className="form-text text-muted">The Name that will apier in the students Page</small>
-                        </div>
-                    </td>
-                </tr>
+    onFormSubmit() {
 
-                <tr>
-                    <td>
-                        <div className="form-group"> 
-                            <label>Assingment File:</label>
-                        </div>
-                    </td>
-                    <td>
-                        <div className="form-group"> 
-                        <input type="file" class="form-control-file" ref = "AssingmentName" />
-                        <small className="form-text text-muted">Upload the file with the Details Regarding the Assingment</small>
-                        </div>
-                    </td>
-                </tr>
+        var formData = new FormData();
 
-                <tr>
-                    <td>
-                        <div className="form-group"> 
-                            <label>Assingment Dead Line:</label>
-                        </div>
-                    </td>
-                    <td>
-                        <div className="form-group"> 
-                            <DatePicker
-                                className = "datePicker"
-                                selected={this.state.startDate}
-                                value = {this.state.startDate}
-                                minDate = {new Date()}
-                                onChange={this.handleChange.bind(this)}
-                                dateFormat="dd/MM/yyyy" ref = "deadLine"/><br/> </div>
-                    </td>
-                </tr>
-             </tbody>
-            </table>
-            </form>
+        formData.append("File", this.state.File);
 
-        <br/>
-        <div className= "formFooter">
-            <Button variant="secondary" className = "btn btn-danger"  onClick={() => {this.handleClose()}}>
-                    Close
+    }
+
+    render() {
+        return (
+            <div>
+                <form>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div className="form-group">
+                                        <label>Course Name:</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="form-group">
+                                        <select ref="courseName">
+                                            <option value="Sex Educetion" >Educeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetion</option>
+                                            <option value="Sex Educetion" >Educeetion</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div className="form-group">
+                                        <label>Assingment Name:</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="form-group">
+                                        <input type="email" className="form-control" ref="AssingmentName" placeholder="Enter Assingment Name" />
+                                        <small className="form-text text-muted">The Name that will apier in the students Page</small>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div className="form-group">
+                                        <label>Assingment File:</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="form-group">
+                                        <input type="file" className="form-control-file" ref="AssingmentName" onChange={(e) => { this.onFileUpload(e) }} />
+                                        <small className="form-text text-muted">Upload the file with the Details Regarding the Assingment</small>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div className="form-group">
+                                        <label>Assingment Dead Line:</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="form-group">
+                                        <DatePicker
+                                            className="datePicker"
+                                            selected={this.state.startDate}
+                                            value={this.state.startDate}
+                                            minDate={new Date()}
+                                            onChange={this.handleChange.bind(this)}
+                                            dateFormat="dd/MM/yyyy" ref="deadLine" /><br /> </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+                <br />
+                <div className="formFooter">
+                    <Button variant="secondary" className="btn btn-danger" onClick={() => { this.handleClose() }}>
+                        Close
             </Button>
-            
-            <Button variant="primary" onClick={() => {this.handleSave()}}>
-                    Save Changes
+
+                    <Button variant="primary" onClick={() => { this.handleSave() }}>
+                        Save Changes
             </Button></div>
-        </div>
-    );
+            </div>
+        );
     }
 }
 
