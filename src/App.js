@@ -8,6 +8,7 @@ import Home from './components/Home';
 import Header from './components/Header';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import VerifyMail from './components/user/VerifyMail';
 import SideBar from './components/admin/SideBar';
 import Dashboard from './components/admin/Dashboard';
 import AddUser from './components/admin/AddUser';
@@ -99,8 +100,8 @@ export class App extends Component {
             <Route exact path='/home' component={Home} />
             <GuestRoute exact path='/login' component={Login} />
             <GuestRoute exact path='/signup' component={Signup} />
+            <Route exact path="/user/verify" component={VerifyMail} />
             <Route path='/sidebar' component={SideBar} />
-            {/* <Route exact path='/admin/dashboard' component={Dashboard} /> */}
             <ProtectedRoute exact path='/admin/dashboard' component={Dashboard} />
             <Route exact path='/admin/users/students' component={AddUser} />
 

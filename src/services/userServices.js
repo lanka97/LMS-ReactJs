@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const apiBaseURL = 'http://localhost:4200/user'
+const apiNodeURL = 'http://localhost:4200/user';
+const apiSpringURL = 'http://localhost:8080/lms/user';
+
 
 export const loginUser = (user) => {
 
     return axios({
         method: 'POST',
-        url: apiBaseURL + '/login',
+        url: apiNodeURL + '/login',
         data: user,
         config: {
             headers: {
@@ -17,11 +19,26 @@ export const loginUser = (user) => {
     })
 };
 
+export const getUsers = () => {
+
+    return axios({
+        method: 'GET',
+        url: apiNodeURL,
+        config: {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+    })
+
+};
+
 export const registerUser = (user) => {
 
     return axios({
         method: 'POST',
-        url: apiBaseURL + '/register',
+        url: apiSpringURL + '/register',
         data: user,
         config: {
             headers: {

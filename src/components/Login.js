@@ -15,17 +15,18 @@ export default class Login extends Component {
       validated: false,
       username: '',
       password: '',
-      message: 'none'
+      message: '',
+      error: false
     };
 
     this.validateUser = this.validateUser.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.displayError = this.displayError.bind(this);
 
   }
 
   componentDidMount() {
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user)
 
     if (user) {
       this.props.history.push('/');
@@ -50,13 +51,9 @@ export default class Login extends Component {
 
   validateUser() {
     const user = {
-      // username: this.state.username,
-      // password: this.state.password
       username: this.refs.username.value,
       password: this.refs.password.value
     }
-
-    console.log(user);
 
     loginUser(user)
       .then(res => {
@@ -65,22 +62,35 @@ export default class Login extends Component {
           this.setState({ message: res.message });
           localStorage.setItem('user', JSON.stringify(res.user));
           this.props.history.push('/');
-          return (
-            <Route>
-              <Redirect to="/" />
-            </Route>
-          );
         } else {
           this.setState({ message: 'Something went wrong' });
         }
       })
       .catch(err => {
+        err = err.response.data;
         this.setState({
-          message: err
+          error: true,
+          message: err.message
         });
       });
+  }
 
-
+  displayError() {
+    if (this.state.error) {
+      if (this.state.message === "Please verify your email") {
+        return (
+          <div className="alert alert-danger">
+            <h6>{this.state.message}! <Link to="/user/verify">Click here</Link></h6>
+          </div>
+        );
+      } else {
+        return (
+          <div className="alert alert-danger">
+            <h6>{this.state.message}</h6>
+          </div>
+        );
+      }
+    }
   }
 
   render() {
@@ -90,6 +100,7 @@ export default class Login extends Component {
       <Container className="h-100 mt-5">
         <Row className="h-100 justify-content-center align-items-center">
           <Col md={5} className="text-center">
+            {this.displayError()}
             <Card bg={"light"}>
               <Card.Body>
                 <Form noValidate validated={validated}

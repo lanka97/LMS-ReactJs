@@ -1,12 +1,145 @@
 import React, { Component } from 'react';
-import { Container, Form, Col, InputGroup, Button, Row, Card } from 'react-bootstrap';
+import { Container, Form, Col, InputGroup, Button, Card, ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faLock, faEnvelope, faPhone, faMale, faFemale } from '@fortawesome/free-solid-svg-icons';
+
+import { registerUser, getUsers } from '../services/userServices';
 
 export default class Signup extends Component {
 
-  constructor(...args) {
-    super(...args);
+  constructor(props, context) {
+    super(props, context);
 
-    this.state = { validated: false };
+    this.handleGender = this.handleGender.bind(this);
+    this.handleFaculty = this.handleFaculty.bind(this);
+    this.handleUsername = this.handleUsername.bind(this);
+    this.validateUser = this.validateUser.bind(this);
+    this.displayError = this.displayError.bind(this);
+
+    this.state = {
+      validated: false,
+      usernames: [],
+      emails: [],
+      firstname: '',
+      lastname: '',
+      email: '',
+      phone: '',
+      gender: 'Male',
+      username: '',
+      password: '',
+      confirmPass: '',
+      faculty: '',
+      message: '',
+      error: false
+    };
+  }
+
+  componentDidMount() {
+
+    const untemp = [];
+
+    getUsers()
+      .then(res => {
+        if (res) {
+          res = res.data;
+          for (const user of res.users) {
+            untemp.push(user.username);
+          }
+          this.setState({
+            usernames: untemp
+          });
+        } else {
+          this.setState({ message: 'Something went wrong' });
+        }
+      })
+      .catch(err => {
+        err = err.response.data
+        this.setState({
+          message: err.message
+        });
+      });
+  }
+
+  handleGender(gender) {
+    this.setState({ gender });
+    console.log(this.state.gender);
+  }
+
+  handleFaculty(faculty) {
+    this.setState({ faculty });
+    console.log(this.state.faculty);
+  }
+
+  handleUsername(event) {
+    const currentUsername = event.target.value;
+    const usernames = this.state.usernames;
+
+    for (const username of usernames) {
+      if (username === currentUsername) {
+        this.setState({
+          error: true,
+          message: 'Username unavailable'
+        });
+        this.displayError();
+        console.log()
+        return;
+      } else {
+        this.setState({
+          error: false,
+          message: 'Username available'
+        });
+      }
+    }
+
+  }
+
+  displayError() {
+    if (this.state.error) {
+      return (
+        <div className="alert alert-danger text-center">
+          <h6>{this.state.message}</h6>
+        </div>
+      );
+    } else {
+      return (
+        <div className="alert text-success text-center">
+          <h6>{this.state.message}</h6>
+        </div>
+      );
+    }
+  }
+
+  validateUser() {
+    const user = {
+      fullname: this.refs.firstname.value + " " + this.refs.lastname.value,
+      email: this.refs.email.value,
+      phone: this.refs.phone.value,
+      gender: this.state.gender,
+      username: this.refs.username.value,
+      password: this.refs.password.value,
+      faculty: this.state.faculty,
+      type: 'STUDENT',
+      status: 'ACTIVE',
+    }
+
+    registerUser(user)
+      .then(res => {
+        res = res.data;
+        console.log(res);
+        if (res) {
+          this.setState({ message: res.message });
+          this.props.history.push('/login');
+        } else {
+          this.setState({ message: 'Something went wrong' });
+        }
+      })
+      .catch(err => {
+        err = err.response.data
+        this.setState({
+          message: err.message
+        });
+      });
   }
 
   handleSubmit(event) {
@@ -14,93 +147,244 @@ export default class Signup extends Component {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
+      this.setState({ validated: true });
+    } else {
+      event.preventDefault();
     }
-    this.setState({ validated: true });
+    this.validateUser();
   }
 
   render() {
     const { validated } = this.state;
 
     return (
-      <Container className="mt-5">
-        <Row>
-          <Col md={8} className="offset-2 vertical-center horizontal-center">
-            <Card.Header>
+      <Container className="mt-5 mb-5">
+
+        <Col>
+          {this.displayError()}
+          <Card className="bg-light">
+            <Card.Body>
               <Form noValidate validated={validated} onSubmit={e => this.handleSubmit(e)} >
+
                 <Form.Row>
-                  <Form.Group as={Col} md="4" controlId="validationCustom01">
+
+                  <Form.Group as={Col} md="6" controlId="validationCustom01">
                     <Form.Label>First name</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="First name"
-                      defaultValue="Mark"
-                    />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroupPrepend">
+                          <FontAwesomeIcon icon={faUser} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        type="text"
+                        placeholder="First name"
+                        aria-describedby="inputGroupPrepend"
+                        required
+                        ref="firstname"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please choose a First name.
+                        </Form.Control.Feedback>
+                    </InputGroup>
                   </Form.Group>
-                  <Form.Group as={Col} md="4" controlId="validationCustom02">
+
+                  <Form.Group as={Col} md="6" controlId="validationCustom02">
                     <Form.Label>Last name</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="Last name"
-                      defaultValue="Otto"
-                    />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroupPrepend">
+                          <FontAwesomeIcon icon={faUser} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        type="text"
+                        placeholder="Last name"
+                        aria-describedby="inputGroupPrepend"
+                        required
+                        ref="lastname"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please choose a Last name.
+                        </Form.Control.Feedback>
+                    </InputGroup>
                   </Form.Group>
+
+                </Form.Row>
+
+                <Form.Row>
+
+                  <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+                    <Form.Label>Email</Form.Label>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroupPrepend">
+                          <FontAwesomeIcon icon={faEnvelope} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        type="email"
+                        placeholder="Email"
+                        aria-describedby="inputGroupPrepend"
+                        required
+                        ref="email"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please choose an email.
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+
+                  <Form.Group as={Col} md="4" controlId="">
+                    <Form.Label>Phone</Form.Label>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroupPrepend">
+                          <FontAwesomeIcon icon={faPhone} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        type="text"
+                        placeholder="Phone"
+                        aria-describedby="inputGroupPrepend"
+                        required
+                        ref="phone"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please choose a phone number.
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+
+                  <Form.Group as={Col} md="4" controlId="">
+                    <Form.Label> Gender</Form.Label>
+                    <InputGroup>
+                      <ButtonToolbar>
+                        <ToggleButtonGroup type="radio" name="genderOptions" ref="gender" defaultValue={"Male"} onChange={this.handleGender}>
+                          <ToggleButton value={"Male"} >
+                            &nbsp;<FontAwesomeIcon icon={faMale} />&nbsp;&nbsp;Male&nbsp;
+                            </ToggleButton>
+                          <ToggleButton value={"Female"} >
+                            &nbsp;<FontAwesomeIcon icon={faFemale} />&nbsp;&nbsp;Female&nbsp;
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                      </ButtonToolbar>
+                      <Form.Control.Feedback type="invalid">
+                        Please retype to confirm.
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+
+                </Form.Row>
+
+                <Form.Row>
+
                   <Form.Group as={Col} md="4" controlId="validationCustomUsername">
                     <Form.Label>Username</Form.Label>
                     <InputGroup>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+                        <InputGroup.Text id="inputGroupPrepend">
+                          <FontAwesomeIcon icon={faUser} />
+                        </InputGroup.Text>
                       </InputGroup.Prepend>
                       <Form.Control
                         type="text"
                         placeholder="Username"
                         aria-describedby="inputGroupPrepend"
                         required
+                        ref="username"
+                        onChange={this.handleUsername}
                       />
                       <Form.Control.Feedback type="invalid">
                         Please choose a username.
-              </Form.Control.Feedback>
+                        </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
+
+                  <Form.Group as={Col} md="4" controlId="">
+                    <Form.Label>Password</Form.Label>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroupPrepend">
+                          <FontAwesomeIcon icon={faLock} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        type="password"
+                        placeholder="Password"
+                        aria-describedby="inputGroupPrepend"
+                        required
+                        ref="password"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please choose a password.
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+
+                  <Form.Group as={Col} md="4" controlId="">
+                    <Form.Label> Confirm Password</Form.Label>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroupPrepend">
+                          <FontAwesomeIcon icon={faLock} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        type="password"
+                        placeholder="Confirm Password"
+                        aria-describedby="inputGroupPrepend"
+                        required
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please retype to confirm.
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+
                 </Form.Row>
+
                 <Form.Row>
-                  <Form.Group as={Col} md="6" controlId="validationCustom03">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control type="text" placeholder="City" required />
-                    <Form.Control.Feedback type="invalid">
-                      Please provide a valid city.
-            </Form.Control.Feedback>
+
+                  <Form.Group as={Col} md="6" controlId="">
+                    <Form.Label> Faculty</Form.Label>
+                    <InputGroup>
+                      <ButtonToolbar>
+                        <ToggleButtonGroup type="radio" ref="faculty" name="facultyOptions" onChange={this.handleFaculty}>
+                          <ToggleButton value={"Computing"} >
+                            &nbsp;&nbsp;&nbsp;Computing&nbsp;&nbsp;
+                          </ToggleButton>
+                          <ToggleButton value={"Business"} >
+                            &nbsp;&nbsp;Business&nbsp;
+                          </ToggleButton>
+                          <ToggleButton value={"Engineering"} >
+                            &nbsp;&nbsp;Engineering&nbsp;
+                          </ToggleButton>
+                        </ToggleButtonGroup>
+                      </ButtonToolbar>
+                      <Form.Control.Feedback type="invalid">
+                        Please retype to confirm.
+                        </Form.Control.Feedback>
+                    </InputGroup>
                   </Form.Group>
-                  <Form.Group as={Col} md="3" controlId="validationCustom04">
-                    <Form.Label>State</Form.Label>
-                    <Form.Control type="text" placeholder="State" required />
-                    <Form.Control.Feedback type="invalid">
-                      Please provide a valid state.
-            </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group as={Col} md="3" controlId="validationCustom05">
-                    <Form.Label>Zip</Form.Label>
-                    <Form.Control type="text" placeholder="Zip" required />
-                    <Form.Control.Feedback type="invalid">
-                      Please provide a valid zip.
-            </Form.Control.Feedback>
-                  </Form.Group>
+
                 </Form.Row>
+
                 <Form.Group>
                   <Form.Check
                     required
                     label="Agree to terms and conditions"
                     feedback="You must agree before submitting."
                   />
+
                 </Form.Group>
-                <Button type="submit">Submit form</Button>
+
+                <Button type="submit">Signup</Button>
               </Form>
-            </Card.Header>
-          </Col>
-        </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+
       </Container>
     );
   }
