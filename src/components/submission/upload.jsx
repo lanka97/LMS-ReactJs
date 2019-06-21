@@ -35,7 +35,7 @@ class upload extends Component{
     componentDidMount() {
         let params = this.props.match.params;
         if(this.props.history.action !== "PUSH" ){
-            window.location.href="/course/"+params.courseID+"/assignment/"+params.assignment+"/status";
+            window.location.href="/";
         }
         let dueDate = this.props.location.state.dueDate;
 
@@ -52,8 +52,9 @@ class upload extends Component{
         let end = moment(dueDate,'DD-MM-YYYY');
         let startTime = moment();
 
+        //if submission is overdue redirect to status page
         if(moment.duration(end.diff(startTime))<=0){
-            window.location.href="/course/"+params.courseID+"/assignment/"+params.assignment+"/status";
+            window.location.href="/course/"+params.courseID+"/assignment/"+params.assignmentID+"/status";
         }
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -99,7 +100,7 @@ class upload extends Component{
 
                 fn_addSubmission(payload).then(data => {
                     this.props.history.push({
-                        pathname: "/course/" + this.state.courseID + "/assignment/" + this.state.assignmentName + "/status",
+                        pathname: "/course/" + this.state.courseID + "/assignment/" + this.props.location.state.assignmentID + "/status",
                         state: {upload: true}
                     })
 
@@ -137,7 +138,7 @@ class upload extends Component{
             fn_addSubmission(payload).then(data => {
 
                 this.props.history.push({
-                    pathname: "/course/" + this.state.courseID + "/assignment/" + this.state.assignmentName + "/status",
+                    pathname: "/course/" + this.state.courseID + "/assignment/" + this.props.location.state.assignmentID + "/status",
                     state: {upload: true}
                 })
 

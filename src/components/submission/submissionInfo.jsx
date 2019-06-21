@@ -3,7 +3,11 @@ import Table from 'react-bootstrap/Table'
 import {Link} from "react-router-dom";
 import moment from "moment";
 import Alert from 'react-bootstrap/Alert'
-import {fn_getSpecificSubmissionInfo, fn_updateAssignmentMarks} from "../functions/submission";
+import {
+    fn_getAssignmentInfoByID,
+    fn_getSpecificSubmissionInfo,
+    fn_updateAssignmentMarks
+} from "../functions/submission";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
@@ -32,7 +36,8 @@ class submissionInfo extends Component{
             isSubmitted:false,
             file:null,
             btnAdd:"Add",
-            uploadID:""
+            uploadID:"",
+            assignmentDoc:"",
         };
 
         this.countDown = this.countDown.bind(this);
@@ -41,74 +46,80 @@ class submissionInfo extends Component{
 
     componentDidMount() {
         let params = this.props.match.params;
-        var dueDate = "02/07/2019";
 
-        let upload = this.props.location.state!== undefined ? this.props.location.state.upload : false;
+        fn_getAssignmentInfoByID(params.assignment).then(data=>{
 
-        this.setState({
-            assignment:params.assignment,
-            courseID:params.courseID,
-            dueDate:dueDate,
-            uploadedAlert:upload
+            data = data.data;
+
+            this.setState({
+                assignment:data.assgnmentName,
+                courseID:params.courseID,
+                dueDate:data.deadLine,
+                uploadedAlert:this.props.location.state!== undefined ? this.props.location.state.upload : false,
+                assignmentDoc:data.doc
+            });
+            this.timer = setInterval(this.countDown, 1000);
+
+            let payload = {
+                assignment:data.assgnmentName,
+                courseID:params.courseID,
+                studentID:"IT17102674"
+            };
+
+            fn_getSpecificSubmissionInfo(payload)
+                .then(data=>{
+
+                    clearInterval(this.timer);
+                    data = data.data;
+
+                    //set viewed
+
+                    if(data.marks !==0){
+                        let payload = new FormData();
+                        payload.set('marks',data.marks);
+                        payload.set('isViewed','true');
+
+                        fn_updateAssignmentMarks(data.id,payload).then();
+                    }
+
+                    //set submitted time
+                    let end = moment(this.state.dueDate,'DD/MM/YYYY');
+                    let startTime = moment(data.createdAt, 'YYYY-MM-DD HH:mm:ss');
+                    var duration = moment.duration(end.diff(startTime));
+
+                    let diff = duration.asSeconds();
+                    let hours = Math.floor(diff / 3600);
+                    diff = diff - hours * 3600;
+                    let minutes = Math.floor(diff / 60);
+                    let seconds = diff - minutes * 60;
+
+                    let remaining = {
+                        hours:~~hours,
+                        minutes:~~minutes,
+                        seconds:~~seconds
+                    };
+
+                    this.setState({
+                        isSubmitted:true,
+                        file:data.file,
+                        lastModified:moment(data.createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMMM Do YYYY, hh:mm a'),
+                        status:{
+                            submission:"Attempted",
+                            grading:data.marks === 0 ?"Not Graded" : data.marks
+                        },
+                        isActiveSubmission:true,
+                        remaining : remaining,
+                        btnAdd:"Edit Submission",
+                        uploadID:data.id
+                    });
+
+                }).catch()
+        }).catch(()=>{
+            this.props.history.push({
+                pathname: "/course/" + params.courseID,
+            })
         });
 
-        this.timer = setInterval(this.countDown, 1000);
-
-        let payload = {
-            assignment:params.assignment,
-            courseID:params.courseID,
-            studentID:"IT17102674"
-        };
-
-        fn_getSpecificSubmissionInfo(payload)
-            .then(data=>{
-
-                clearInterval(this.timer);
-                data = data.data;
-
-                //set viewed
-
-                if(data.marks !==0){
-                    let payload = new FormData();
-                    payload.set('marks',data.marks);
-                    payload.set('isViewed','true');
-
-                    fn_updateAssignmentMarks(data.id,payload).then();
-                }
-
-                //set submitted time
-                let end = moment(this.state.dueDate,'DD/MM/YYYY');
-                let startTime = moment(data.createdAt, 'YYYY-MM-DD HH:mm:ss');
-                var duration = moment.duration(end.diff(startTime));
-
-                let diff = duration.asSeconds();
-                let hours = Math.floor(diff / 3600);
-                diff = diff - hours * 3600;
-                let minutes = Math.floor(diff / 60);
-                let seconds = diff - minutes * 60;
-
-                let remaining = {
-                    hours:~~hours,
-                    minutes:~~minutes,
-                    seconds:~~seconds
-                };
-
-
-                this.setState({
-                    isSubmitted:true,
-                    file:data.file,
-                    lastModified:moment(data.createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMMM Do YYYY, hh:mm a'),
-                    status:{
-                        submission:"Attempted",
-                        grading:data.marks === 0 ?"Not Graded" : data.marks
-                    },
-                    remaining : remaining,
-                    btnAdd:"Edit Submission",
-                    uploadID:data.id
-                });
-
-            })
-            .catch()
     }
 
     componentWillUnmount() {
@@ -152,7 +163,8 @@ class submissionInfo extends Component{
                 state:{
                     dueDate:this.state.dueDate,
                     reupload:this.state.isSubmitted,
-                    uploadID:this.state.uploadID
+                    uploadID:this.state.uploadID,
+                    assignmentID:this.props.match.params.assignment
                 }
             }}>{this.state.btnAdd}</Link>;
 
@@ -219,7 +231,7 @@ class submissionInfo extends Component{
                     <div className="col-3">
                     </div>
                     <div className="col-6">
-                        {this.state.isActiveSubmission ? addBtn : ''}
+                        {this.state.isActiveSubmission? addBtn : ''}
                     </div>
                 </div>
 

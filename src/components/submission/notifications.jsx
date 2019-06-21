@@ -45,10 +45,11 @@ class notifications extends Component{
                             return false;
 
                         return(
-                            <a href={`/course/${value.courseId}/assignment/${value.assigmentName}/status`} className="text-decoration-none" key={index}>
+                            <a href={`/course/${value.courseId}`} className="text-decoration-none" key={index}>
                                 <div className={value.viewed ? 'card mt-3 bg-default' : 'card mt-3 bg-light'} >
                                     <div className="card-body text-dark">
-                                        Your <span className="font-weight-bold">{value.courseId}</span> module's <span className="font-weight-bold">{value.assigmentName}</span> marks have updated
+                                        Your <span className="font-weight-bold">{value.courseId}</span> module's <span className="font-weight-bold">{value.assigmentName}</span> marks have updated and you got
+                                        <span className="font-italic"> {value.marks} </span> mark
                                     </div>
 
                                 </div>
