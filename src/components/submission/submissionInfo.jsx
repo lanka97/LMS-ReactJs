@@ -185,6 +185,9 @@ class submissionInfo extends Component{
         return(
             <div className={"container"}>
                 <div className="mt-3"><h4>{this.state.assignment.charAt(0).toUpperCase() + this.state.assignment.substring(1).toLowerCase()}</h4></div>
+                <div>
+                    <a href={process.env.REACT_APP_SPRING_API+"/lms/submission/download/"+this.state.assignmentDoc}><Badge pill variant="success">Reference<FontAwesomeIcon icon={faDownload}/></Badge></a>
+                </div>
 
                 <div className="mt-5 col-10">
                     {this.state.uploadedAlert?alert:''}
