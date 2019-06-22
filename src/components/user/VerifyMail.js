@@ -78,6 +78,7 @@ export default class VerifyMail extends Component {
                     res = res.data;
                     this.setState({
                         message: res.message,
+                        error: false
                     });
 
                 } else {

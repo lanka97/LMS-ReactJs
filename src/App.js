@@ -9,13 +9,39 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import VerifyMail from './components/user/VerifyMail';
-import SideBar from './components/admin/SideBar';
-import Dashboard from './components/admin/Dashboard';
+import Profile from './components/user/Profile';
+import AdminSideBar from './components/admin/AdminSideBar';
+import AdminDashboard from './components/admin/AdminDashboard';
 import AddUser from './components/admin/AddUser';
+import InstructorSideBar from './components/instructor/InstructorSideBar';
+import InstructorDashboard from './components/instructor/InstructorDashboard';
 
 import './App.css';
 
 const user = JSON.parse(localStorage.getItem('user'));
+
+function AuthRoute({ component: Component, ...rest }) {
+  return (
+    <Route {...rest} render={props => {
+
+      if (user) {
+        return <Component {...props} />;
+      } else {
+        return (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: {
+                from: props.location
+              }
+            }}
+          />
+        );
+      }
+    }}
+    />
+  );
+}
 
 function AdminRoute({ component: Component, ...rest }) {
   return (
@@ -140,13 +166,19 @@ export class App extends Component {
             <Route path="/" component={Header} />
             <Route exact path='/' component={Home} />
             <Route exact path='/home' component={Home} />
+
             <GuestRoute exact path='/login' component={Login} />
             <GuestRoute exact path='/signup' component={Signup} />
             <GuestRoute exact path="/user/verify" component={VerifyMail} />
-            <AdminRoute exact path='/admin/dashboard' component={Dashboard} />
+
+            <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
             <AdminRoute exact path='/admin/users/students' component={AddUser} />
 
-            <Route path='/sidebar' component={SideBar} />
+            <InstructorRoute exact path='/instructor/dashboard' component={InstructorDashboard} />
+
+            <AuthRoute exact path='/user/profile' component={Profile} />
+
+            <Route path='/sidebar' component={AdminSideBar} />
 
           </div>
         </BrowserRouter>

@@ -31,7 +31,7 @@ export class Header extends Component {
         <Navbar>
           <Nav>
             <NavDropdown title={this.state.username} id="nav-dropdown" className="active">
-              <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+              <NavDropdown.Item href="/user/profile">Profile</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Settings</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>

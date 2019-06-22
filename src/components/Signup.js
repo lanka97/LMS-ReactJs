@@ -143,7 +143,8 @@ export default class Signup extends Component {
         console.log(err);
         err = err.response.data
         this.setState({
-          message: err.message
+          message: err.message,
+          error: true
         });
       });
   }
@@ -201,14 +202,17 @@ export default class Signup extends Component {
 
   handleSubmit(event) {
     const form = event.currentTarget;
-    if (form.checkValidity() === false && this.state.error) {
+    if (form.checkValidity() === false || this.state.error) {
       event.preventDefault();
       event.stopPropagation();
       this.setState({ validated: true });
+
     } else {
       event.preventDefault();
+      this.setState({ validated: true });
+      this.validateUser();
     }
-    this.validateUser();
+
   }
 
   render() {

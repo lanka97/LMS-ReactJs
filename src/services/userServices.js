@@ -113,3 +113,19 @@ export const verifyUser = (userId, code) => {
 };
 
 
+export const updateUser = (userId, user) => {
+
+    return axios({
+        method: 'PUT',
+        url: apiNodeURL + '/' + userId,
+        data: user,
+        config: {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+    })
+};
+
+
