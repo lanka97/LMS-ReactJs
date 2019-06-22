@@ -147,7 +147,7 @@ export class App extends Component {
 
   componentDidMount() {
 
-    const user = JSON.parse(localStorage.getItem('user'));
+
 
   }
 
