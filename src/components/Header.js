@@ -17,7 +17,6 @@ export class Header extends React.Component {
     }
   }
   showSinginButton() {
-    console.log(this.state.user);
     if (this.state.user) {
       return (<div>{this.state.user}</div>);
     } else {
@@ -28,13 +27,10 @@ export class Header extends React.Component {
   }
 
   navSignIn() {
-    console.log("ssssssssss");
     return (<Redirect to="/" />);
   }
 
   routeChange() {
-    let path = '/login';
-    console.log(path);
     this.props.history.push({ Signin });
   }
 
