@@ -28,6 +28,7 @@ export default class Profile extends Component {
         };
 
         this.handleGender = this.handleGender.bind(this);
+        this.checkPhone = this.checkPhone.bind(this);
         this.validateUser = this.validateUser.bind(this);
         this.displayError = this.displayError.bind(this);
 
@@ -93,6 +94,14 @@ export default class Profile extends Component {
     handleGender(gender) {
         this.setState({ gender });
         console.log(this.state.gender);
+    }
+
+    checkPhone() {
+        if (this.refs.phone.value.substring(0, 3) != '+94' || this.refs.phone.value.length != 12) {
+            this.setState({ error: true, message: 'Invalid number' });
+        } else {
+            this.setState({ error: false, message: 'Valid number' });
+        }
     }
 
     handleSubmit(event) {
@@ -225,6 +234,7 @@ export default class Profile extends Component {
                                                     required
                                                     ref="phone"
                                                     defaultValue={this.state.phone}
+                                                    onChange={this.checkPhone}
                                                 />
                                                 <Form.Control.Feedback type="invalid">
                                                     Please choose a phone number.

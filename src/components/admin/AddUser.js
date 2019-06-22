@@ -490,15 +490,6 @@ export default class AddUser extends Component {
 
                                                         </Form.Row>
 
-                                                        <Form.Group>
-                                                            <Form.Check
-                                                                required
-                                                                label="Agree to terms and conditions"
-                                                                feedback="You must agree before submitting."
-                                                            />
-
-                                                        </Form.Group>
-
                                                         <Button type="submit">Signup</Button>
                                                     </Form>
                                                 </Card.Body>

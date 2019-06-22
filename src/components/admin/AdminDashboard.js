@@ -47,6 +47,7 @@ export default class AdminDashboard extends Component {
                             studenttemp.push(
                                 <tr key={user._id}>
                                     <td>{user.fullname}</td>
+                                    <td>{user.username}</td>
                                     <td>{user.created_at}</td>
                                     <td>{user.faculty}</td>
                                     <td>{user.confirmed ? 'Yes' : 'No'}</td>
@@ -58,6 +59,7 @@ export default class AdminDashboard extends Component {
                             instTemp.push(
                                 <tr key={user._id}>
                                     <td>{user.fullname}</td>
+                                    <td>{user.username}</td>
                                     <td>{user.created_at}</td>
                                     <td>{user.faculty}</td>
                                     <td>{user.confirmed ? 'Yes' : 'No'}</td>
@@ -69,8 +71,8 @@ export default class AdminDashboard extends Component {
                             adminTemp.push(
                                 <tr key={user._id}>
                                     <td>{user.fullname}</td>
+                                    <td>{user.username}</td>
                                     <td>{user.created_at}</td>
-                                    <td>{user.faculty}</td>
                                     <td>{user.confirmed ? 'Yes' : 'No'}</td>
                                 </tr>
                             );
@@ -108,7 +110,7 @@ export default class AdminDashboard extends Component {
                     <AdminSideBar />
                     <Col style={{ padding: 0 }}>
                         <Container style={{ padding: '20px' }}>
-                            {/* <h2>Dashboard</h2> */}
+
                             <Row style={{ color: 'white', textAlign: 'right', marginTop: '30px' }}>
                                 <Col md={4}>
                                     <Card bg="info" body>
@@ -141,6 +143,7 @@ export default class AdminDashboard extends Component {
                                                 <tbody>
                                                     <tr className="bg-dark text-white">
                                                         <th>Name</th>
+                                                        <th>Username</th>
                                                         <th>Joined</th>
                                                         <th>Faculty</th>
                                                         <th>Verified</th>
@@ -162,6 +165,7 @@ export default class AdminDashboard extends Component {
                                                 <tbody>
                                                     <tr className="bg-dark text-white">
                                                         <th>Name</th>
+                                                        <th>Username</th>
                                                         <th>Joined</th>
                                                         <th>Department</th>
                                                         <th>Verified</th>
@@ -185,8 +189,8 @@ export default class AdminDashboard extends Component {
                                                 <tbody>
                                                     <tr className="bg-dark text-white">
                                                         <th>Name</th>
+                                                        <th>Username</th>
                                                         <th>Joined</th>
-                                                        <th>Faculty</th>
                                                         <th>Verified</th>
                                                     </tr>
 

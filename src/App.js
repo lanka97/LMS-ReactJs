@@ -14,6 +14,9 @@ import AdminSideBar from './components/admin/AdminSideBar';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AddUser from './components/admin/AddUser';
 import InstructorDashboard from './components/instructor/InstructorDashboard';
+import Courses from './components/admin/Courses';
+import InstructorCourses from './components/instructor/InstructorCourses';
+import StudentCourses from './components/student/StudentCourses';
 
 import './App.css';
 
@@ -30,6 +33,53 @@ function AuthRoute({ component: Component, ...rest }) {
           <Redirect
             to={{
               pathname: "/login",
+              state: {
+                from: props.location
+              }
+            }}
+          />
+        );
+      }
+    }}
+    />
+  );
+}
+
+function HomeRoute({ component: Component, ...rest }) {
+  return (
+    <Route {...rest} render={props => {
+
+      if (user && user.type === "ADMIN") {
+        return (
+          <Redirect
+            to={{
+              pathname: "/admin/dashboard",
+              state: {
+                from: props.location
+              }
+            }}
+          />
+        );
+      }
+
+      if (user && user.type === "INSTRUCTOR") {
+        return (
+          <Redirect
+            to={{
+              pathname: "/",
+              state: {
+                from: props.location
+              }
+            }}
+          />
+        );
+      }
+
+      if (!user || user.type === "STUDENT") {
+        return (
+          <Redirect
+            to={{
+              pathname: "/",
               state: {
                 from: props.location
               }
@@ -153,7 +203,7 @@ export class App extends Component {
 
             <Route path="/" component={Header} />
             <Route exact path='/' component={Home} />
-            <Route exact path='/home' component={Home} />
+            <HomeRoute exact path='/home' component={Home} />
 
             <GuestRoute exact path='/login' component={Login} />
             <GuestRoute exact path='/signup' component={Signup} />
@@ -161,12 +211,15 @@ export class App extends Component {
 
             <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
             <AdminRoute exact path='/admin/users/create' component={AddUser} />
+            <AdminRoute exact path='/admin/courses' component={Courses} />
 
             <InstructorRoute exact path='/instructor/dashboard' component={InstructorDashboard} />
+            <InstructorRoute exact path='/instructor/courses' component={InstructorCourses} />
+
+            <StudentRoute exact path='/student/courses' component={StudentCourses} />
 
             <AuthRoute exact path='/user/profile' component={Profile} />
 
-            <Route path='/sidebar' component={AdminSideBar} />
 
           </div>
         </BrowserRouter>

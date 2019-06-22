@@ -9,7 +9,7 @@ export class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: ''
+      user: {}
     }
   }
 
@@ -17,30 +17,29 @@ export class Header extends Component {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       this.setState({
-        username: user.username
+        user: user
       })
     }
 
   }
 
   showSinginButton() {
-    //console.log(this.state.user.username);
-    if (localStorage.getItem('user')) {
 
+    if (localStorage.getItem('user')) {
+      console.log(this.state.user.username);
       return (
         <Navbar>
           <Nav>
-            <NavDropdown title={this.state.username} id="nav-dropdown" className="active">
+            <NavDropdown title={this.state.user.username} id="nav-dropdown" className="active">
               <NavDropdown.Item href="/user/profile">Profile</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Settings</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
             </NavDropdown>
           </Nav>
-
           <button className='btn btn-primary ml-3' onClick={this.onLogout}>Logout </button>
-
         </Navbar>);
+
     } else {
       return (
         <div>
@@ -67,14 +66,21 @@ export class Header extends Component {
   }
 
   navbarItems() {
-    if (this.props.user === 'student') {
+    if (this.state.user.type === 'STUDENT') {
       return (
-        <Nav.Link href="/Courses"> <span className="navItem">Link</span></Nav.Link>
+        <Nav.Link href="/student/courses"> <span className="navItem">Courses</span></Nav.Link>
       );
     }
-    else {
 
+    if (this.state.user.type === 'INSTRUCTOR') {
+      return (
+        <Nav>
+          <Nav.Link href="/instructor/courses"> <span className="navItem">Courses</span></Nav.Link>
+          <Nav.Link href="/instructor/assignments"> <span className="navItem">Assignments</span></Nav.Link>
+        </Nav>
+      );
     }
+
   }
 
   onLogout() {
@@ -93,16 +99,7 @@ export class Header extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/home" > <span className="navItem">Home</span></Nav.Link>
-              <Nav.Link href="/link"> <span className="navItem">Link</span></Nav.Link>
               {this.navbarItems()}
-              <NavDropdown title="Dropdown" id="nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-              </NavDropdown>
-
             </Nav>
             <Form inline>
               <span className="navItem">{this.showSinginButton()}</span>

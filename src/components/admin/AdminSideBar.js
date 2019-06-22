@@ -34,6 +34,13 @@ export default class AdminSideBar extends Component {
                             </Link>
                         </Accordion.Collapse>
                     </Card>
+                    <Card className="bg-dark text-white">
+                        <Link className="bg-dark text-white" to="/admin/courses">
+                            <Accordion.Toggle as={Card.Header}>
+                                <FontAwesomeIcon icon={faHome} /> &nbsp; Courses
+                        </Accordion.Toggle>
+                        </Link>
+                    </Card>
                 </Accordion>
             </Col >
 

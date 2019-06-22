@@ -61,7 +61,7 @@ export default class Login extends Component {
           res = res.data;
           this.setState({ message: res.message });
           localStorage.setItem('user', JSON.stringify(res.user));
-          this.props.history.push('/');
+          this.props.history.push('/home');
         } else {
           this.setState({ message: 'Something went wrong' });
         }

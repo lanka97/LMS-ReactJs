@@ -1,0 +1,22 @@
+#card-list{
+    width: auto;
+    padding-left: 150px;
+    padding-right: 150px
+}
+
+#divcard{
+    
+    background-color: rgb(230, 231, 231);
+    
+}
+
+#btn-div{
+    float: right;
+    padding-right: 50px;
+    padding-top: 10px
+}
+
+.button-margin{
+    margin: 5px;
+}
+
