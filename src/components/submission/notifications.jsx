@@ -49,7 +49,7 @@ class notifications extends Component{
                                 <div className={value.viewed ? 'card mt-3 bg-default' : 'card mt-3 bg-light'} >
                                     <div className="card-body text-dark">
                                         Your <span className="font-weight-bold">{value.assigmentName}</span> marks has been updated and you got
-                                        <span className="font-italic"> {value.marks} </span> mark
+                                        <span className="font-italic"> {value.marks} </span> mark({value.courseId})
                                     </div>
 
                                 </div>

@@ -47,6 +47,7 @@ class submissionInfo extends Component{
     componentDidMount() {
         let params = this.props.match.params;
 
+
         fn_getAssignmentInfoByID(params.assignment).then(data=>{
 
             data = data.data;

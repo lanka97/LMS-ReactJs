@@ -6,19 +6,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
 
 import './Header.css';
-import {faBellSlash as notification_icon} from "@fortawesome/free-solid-svg-icons";
+import {faBell} from "@fortawesome/free-solid-svg-icons";
 
 
 import Signin from './signin';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {fn_getAssignmentsByStudentID} from "./functions/submission";
 
 export class Header extends React.Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
-      user: props.user
+      user: props.user,
+      notifications:[]
     }
   }
+
   showSinginButton() {
     if (this.state.user) {
       return (<div>
@@ -31,18 +34,30 @@ export class Header extends React.Component {
     }
   }
 
+  componentDidMount() {
+    let studentID = "IT17102674";
+    fn_getAssignmentsByStudentID(studentID)
+        .then(data=>{
+          this.setState({
+            submissions:data.data,
+          })
+        })
+  }
+
   showNotification(){
-    let icon = (<FontAwesomeIcon icon={notification_icon} className="notification"/>);
+    let icon = (<FontAwesomeIcon icon={faBell} className="notification"/>);
     return(
         <div className="mr-5">
           <NavDropdown title={icon} id={"noti"}>
-            <NavDropdown.Item href="#action/3.1" className="bg-secondary">
-              fefsefe
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+
+            {this.state.notifications.map((value, index) => {
+              return (
+                  <NavDropdown.Item href={`/course/${value.courseId}`} className="bg-secondary">
+                    Your <span className="font-weight-bold">{value.assigmentName}</span> marks has been updated and you got
+                    <span className="font-italic"> {value.marks} </span> mark({value.courseId})
+                  </NavDropdown.Item>
+              )
+            })}
           </NavDropdown>
         </div>
     );
