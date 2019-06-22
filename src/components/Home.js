@@ -10,10 +10,12 @@ import thirdImg from '../images/3.jpg';
 export class Home extends React.Component {
   render() {
     const fadeProperties = {
+
       duration: 5000,
       transitionDuration: 500,
       infinite: true,
       indicators: true
+
     }
     return (
       <div>
@@ -35,8 +37,10 @@ export class Home extends React.Component {
           </div>
         </Fade>
       </div>
+
     );
   }
+
 }
 
 export default Home;

@@ -1,11 +1,14 @@
+
 import React, { Component } from 'react';
 import { Route, BrowserRouter, Redirect } from 'react-router-dom';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
 import Home from './components/Home';
 import Header from './components/Header';
+
 import Login from './components/Login';
 import Signup from './components/Signup';
 import VerifyMail from './components/user/VerifyMail';
@@ -18,7 +21,9 @@ import Courses from './components/admin/Courses';
 import InstructorCourses from './components/instructor/InstructorCourses';
 import StudentCourses from './components/student/StudentCourses';
 
+
 import './App.css';
+import viewAllSubmissions from "./components/submission/viewAllSubmissions";
 
 const user = JSON.parse(localStorage.getItem('user'));
 
@@ -203,6 +208,7 @@ export class App extends Component {
 
             <Route path="/" component={Header} />
             <Route exact path='/' component={Home} />
+
             <HomeRoute exact path='/home' component={Home} />
 
             <GuestRoute exact path='/login' component={Login} />

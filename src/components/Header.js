@@ -3,6 +3,7 @@ import { Redirect, Link } from 'react-router-dom';
 import { Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
 
 import './Header.css';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export class Header extends Component {
@@ -51,18 +52,49 @@ export class Header extends Component {
           </Link>
         </div>
       );
+
     }
   }
 
+  componentDidMount() {
+    let studentID = "IT17102674";
+    fn_getAssignmentsByStudentID(studentID)
+        .then(data=>{
+          this.setState({
+            submissions:data.data,
+          })
+        })
+  }
+
+  showNotification(){
+    let icon = (<FontAwesomeIcon icon={faBell} className="notification"/>);
+    return(
+        <div className="mr-5">
+          <NavDropdown title={icon} id={"noti"}>
+
+            {this.state.notifications.map((value, index) => {
+              return (
+                  <NavDropdown.Item href={`/course/${value.courseId}`} className="bg-secondary">
+                    Your <span className="font-weight-bold">{value.assigmentName}</span> marks has been updated and you got
+                    <span className="font-italic"> {value.marks} </span> mark({value.courseId})
+                  </NavDropdown.Item>
+              )
+            })}
+          </NavDropdown>
+        </div>
+    );
+  }
+
   navSignIn() {
-    console.log("ssssssssss");
     return (<Redirect to="/" />);
   }
 
   routeChange() {
+
     let path = '/login';
     console.log(path);
     this.props.history.push('/login');
+
   }
 
   navbarItems() {
@@ -91,16 +123,18 @@ export class Header extends Component {
   render() {
     return (
       <div>
-
         <Navbar expand="lg" bg="primary" variant="dark">
           <Navbar.Brand href="/home">
-            <span className="navItem">SLIT</span></Navbar.Brand>
+            <span className="navItem">ISE</span></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/home" > <span className="navItem">Home</span></Nav.Link>
+
               {this.navbarItems()}
+
             </Nav>
+
             <Form inline>
               <span className="navItem">{this.showSinginButton()}</span>
             </Form>
