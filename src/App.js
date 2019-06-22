@@ -140,15 +140,8 @@ export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogged: false,
-      fuck: ''
+
     }
-  }
-
-  componentDidMount() {
-
-
-
   }
 
 
@@ -167,7 +160,7 @@ export class App extends Component {
             <GuestRoute exact path="/user/verify" component={VerifyMail} />
 
             <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
-            <AdminRoute exact path='/admin/users/students' component={AddUser} />
+            <AdminRoute exact path='/admin/users/create' component={AddUser} />
 
             <InstructorRoute exact path='/instructor/dashboard' component={InstructorDashboard} />
 

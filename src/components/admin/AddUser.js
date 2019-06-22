@@ -21,6 +21,8 @@ export default class AddUser extends Component {
         this.validateUser = this.validateUser.bind(this);
         this.getUser = this.getUser.bind(this);
         this.sendEmail = this.sendEmail.bind(this);
+        this.checkPasswords = this.checkPasswords.bind(this);
+        this.checkPhone = this.checkPhone.bind(this);
         this.displayError = this.displayError.bind(this);
 
         this.state = {
@@ -208,6 +210,23 @@ export default class AddUser extends Component {
 
     }
 
+    checkPasswords() {
+        if (this.refs.password.value != this.refs.confirmPass.value) {
+            this.setState({ error: true, message: 'Passwords do not match' });
+        } else {
+            this.setState({ error: false, message: 'Passwords match' });
+        }
+    }
+
+
+    checkPhone() {
+        if (this.refs.phone.value.substring(0, 3) != '+94' || this.refs.phone.value.length != 12) {
+            this.setState({ error: true, message: 'Invalid number' });
+        } else {
+            this.setState({ error: false, message: 'Valid number' });
+        }
+    }
+
 
     handleSubmit(event) {
         const form = event.currentTarget;
@@ -323,10 +342,11 @@ export default class AddUser extends Component {
                                                                     </InputGroup.Prepend>
                                                                     <Form.Control
                                                                         type="text"
-                                                                        placeholder="Phone"
+                                                                        placeholder="Phone (+94XXXXXXXXX)"
                                                                         aria-describedby="inputGroupPrepend"
                                                                         required
                                                                         ref="phone"
+                                                                        onChange={this.checkPhone}
                                                                     />
                                                                     <Form.Control.Feedback type="invalid">
                                                                         Please choose a phone number.
@@ -393,6 +413,7 @@ export default class AddUser extends Component {
                                                                         aria-describedby="inputGroupPrepend"
                                                                         required
                                                                         ref="password"
+                                                                        onChange={this.checkPasswords}
                                                                     />
                                                                     <Form.Control.Feedback type="invalid">
                                                                         Please choose a password.
@@ -413,6 +434,8 @@ export default class AddUser extends Component {
                                                                         placeholder="Confirm Password"
                                                                         aria-describedby="inputGroupPrepend"
                                                                         required
+                                                                        ref="confirmPass"
+                                                                        onChange={this.checkPasswords}
                                                                     />
                                                                     <Form.Control.Feedback type="invalid">
                                                                         Please retype to confirm.
@@ -482,41 +505,6 @@ export default class AddUser extends Component {
                                             </Card>
 
                                         </Card.Body>
-                                    </Card>
-                                </Col>
-                            </Row>
-
-                            <Row style={{ marginTop: '50px' }}>
-                                <Col>
-                                    <Card>
-                                        <Card.Header>Latest 10 Students</Card.Header>
-                                        <Card.Text style={{ padding: '10px' }}>
-                                            <Table striped bordered hover size="sm">
-                                                <tbody>
-                                                    <tr className="bg-dark text-white">
-                                                        <th>#</th>
-                                                        <th>Name</th>
-                                                        <th>Joined</th>
-                                                        <th>Faculty</th>
-                                                        <th>Verified</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>1</th>
-                                                        <td>John Doe</td>
-                                                        <td>2019/06/06</td>
-                                                        <td>Computing</td>
-                                                        <td>Yes</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>2</th>
-                                                        <td>John Doe</td>
-                                                        <td>2019/06/06</td>
-                                                        <td>Computing</td>
-                                                        <td>Yes</td>
-                                                    </tr>
-                                                </tbody>
-                                            </Table>
-                                        </Card.Text>
                                     </Card>
                                 </Col>
                             </Row>

@@ -27,13 +27,12 @@ export default class AdminSideBar extends Component {
                             <FontAwesomeIcon icon={faUser} /> &nbsp; User
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="1">
-                            <Link className="bg-dark text-white" to="/admin/users/students">
+                            <Link className="bg-dark text-white" to="/admin/users/create">
                                 <Accordion.Toggle as={Card.Header}>
-                                    <FontAwesomeIcon icon={faHome} /> &nbsp; Students
+                                    <FontAwesomeIcon icon={faUser} /> &nbsp; Add User
                                 </Accordion.Toggle>
                             </Link>
                         </Accordion.Collapse>
-
                     </Card>
                 </Accordion>
             </Col >

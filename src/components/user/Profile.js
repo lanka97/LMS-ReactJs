@@ -49,7 +49,7 @@ export default class Profile extends Component {
             created_at: user.created_at
         });
 
-        console.log(user._id)
+        console.log(user)
 
 
     }
@@ -70,6 +70,7 @@ export default class Profile extends Component {
                     res = res.data;
                     console.log(res.user)
                     localStorage.setItem('user', JSON.stringify(res.user));
+                    this.props.history.push('/user/profile')
                     this.setState({
                         error: false,
                         message: res.message
@@ -136,7 +137,7 @@ export default class Profile extends Component {
 
                         <Card>
                             <Card.Body>
-                                <Table borderless>
+                                <Table borderless size="sm">
                                     <tbody>
                                         <tr>
                                             <td>Full Name</td>
@@ -251,51 +252,6 @@ export default class Profile extends Component {
                                         </Form.Group>
 
                                     </Form.Row>
-
-                                    {/* <Form.Row>
-
-                                        <Form.Group as={Col} md="6" controlId="">
-                                            <Form.Label>Password</Form.Label>
-                                            <InputGroup>
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text id="inputGroupPrepend">
-                                                        <FontAwesomeIcon icon={faLock} />
-                                                    </InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <Form.Control
-                                                    type="password"
-                                                    placeholder="Password"
-                                                    aria-describedby="inputGroupPrepend"
-                                                    required
-                                                    ref="password"
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    Please choose a password.
-                                                </Form.Control.Feedback>
-                                            </InputGroup>
-                                        </Form.Group>
-
-                                        <Form.Group as={Col} md="6" controlId="">
-                                            <Form.Label> Confirm Password</Form.Label>
-                                            <InputGroup>
-                                                <InputGroup.Prepend>
-                                                    <InputGroup.Text id="inputGroupPrepend">
-                                                        <FontAwesomeIcon icon={faLock} />
-                                                    </InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <Form.Control
-                                                    type="password"
-                                                    placeholder="Confirm Password"
-                                                    aria-describedby="inputGroupPrepend"
-                                                    required
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    Please retype to confirm.
-                                                </Form.Control.Feedback>
-                                            </InputGroup>
-                                        </Form.Group>
-
-                                    </Form.Row> */}
 
                                     <Button type="submit">Update Profile</Button>
                                 </Form>

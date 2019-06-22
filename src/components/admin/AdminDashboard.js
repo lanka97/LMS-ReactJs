@@ -4,36 +4,34 @@ import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 import { getUsers } from '../../services/userServices';
 
 import AdminSideBar from './AdminSideBar';
-import { Bar, Pie } from 'react-chartjs-2';
-
 
 export default class AdminDashboard extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            showA: true,
-            showB: true,
-            allStudents: [],
+            users: [],
             students: [],
-            allInstructors: [],
+            allStudents: [],
             instructors: [],
+            allInstructors: [],
             allAdmins: [],
             admins: []
         };
 
         this.getAllUsers = this.getAllUsers.bind(this);
+
     }
 
     componentDidMount() {
 
         this.getAllUsers();
-
     }
 
 
     getAllUsers() {
         const studenttemp = [];
+        const studentrows = [];
         const instTemp = [];
         const adminTemp = [];
 
@@ -43,43 +41,37 @@ export default class AdminDashboard extends Component {
                 if (res) {
                     res = res.data;
 
-                    for (let i = 0; i < 10; i++) {
-                        console.log(res.users[i].type)
-                        if (res.users[i].type === 'STUDENT') {
+                    for (const user of res.users) {
+
+                        if (user.type === 'STUDENT') {
                             studenttemp.push(
-                                <tr key={i}>
-                                    <td>{i}</td>
-                                    <td>{res.users[i].fullname}</td>
-                                    <td>{res.users[i].created_at}</td>
-                                    <td>{res.users[i].faculty}</td>
-                                    <td>{res.users[i].confirmed ? 'Yes' : 'No'}</td>
+                                <tr key={user._id}>
+                                    <td>{user.fullname}</td>
+                                    <td>{user.created_at}</td>
+                                    <td>{user.faculty}</td>
+                                    <td>{user.confirmed ? 'Yes' : 'No'}</td>
                                 </tr>
                             );
                         }
 
-
-                        if (res.users[i].type === 'INSTRUCTOR') {
+                        if (user.type === 'INSTRUCTOR') {
                             instTemp.push(
-                                <tr key={i}>
-                                    <td>{i}</td>
-                                    <td>{res.users[i].fullname}</td>
-                                    <td>{res.users[i].created_at}</td>
-                                    <td>{res.users[i].faculty}</td>
-                                    <td>{res.users[i].confirmed ? 'Yes' : 'No'}</td>
+                                <tr key={user._id}>
+                                    <td>{user.fullname}</td>
+                                    <td>{user.created_at}</td>
+                                    <td>{user.faculty}</td>
+                                    <td>{user.confirmed ? 'Yes' : 'No'}</td>
                                 </tr>
                             );
                         }
 
-
-
-                        if (res.users[i].type === 'ADMIN') {
+                        if (user.type === 'ADMIN') {
                             adminTemp.push(
-                                <tr key={i}>
-                                    <td>{i}</td>
-                                    <td>{res.users[i].fullname}</td>
-                                    <td>{res.users[i].created_at}</td>
-                                    <td>{res.users[i].faculty}</td>
-                                    <td>{res.users[i].confirmed ? 'Yes' : 'No'}</td>
+                                <tr key={user._id}>
+                                    <td>{user.fullname}</td>
+                                    <td>{user.created_at}</td>
+                                    <td>{user.faculty}</td>
+                                    <td>{user.confirmed ? 'Yes' : 'No'}</td>
                                 </tr>
                             );
                         }
@@ -91,6 +83,7 @@ export default class AdminDashboard extends Component {
                         admins: adminTemp
                     });
 
+
                 } else {
                     this.setState({ message: 'Something went wrong' });
                 }
@@ -100,56 +93,13 @@ export default class AdminDashboard extends Component {
                 this.setState({
                     message: err.message
                 });
+
             });
 
-        console.log(this.state.students)
     }
 
 
     render() {
-
-        const data = {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 10, 5, 7, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        };
-
-        const options = {
-            annotation: {
-                annotations: [{
-                    drawTime: 'afterDatasetsDraw',
-                    borderColor: 'red',
-                    borderDash: [2, 2],
-                    borderWidth: 2,
-                    mode: 'vertical',
-                    type: 'line',
-                    value: 10,
-                    scaleID: 'x-axis-0',
-                }]
-            },
-            maintainAspectRation: true
-        };
-
-
 
         return (
 
@@ -185,42 +135,11 @@ export default class AdminDashboard extends Component {
                             <Row style={{ marginTop: '50px' }}>
                                 <Col md={6}>
                                     <Card>
-                                        <Card.Header>Some chart</Card.Header>
-                                        <Card.Text>
-                                            <Bar
-                                                data={data}
-                                                width={100}
-                                                height={50}
-                                                options={options}
-                                            />
-                                        </Card.Text>
-                                    </Card>
-                                </Col>
-
-                                <Col md={6}>
-                                    <Card>
-                                        <Card.Header>Another chart</Card.Header>
-                                        <Card.Text>
-                                            <Pie
-                                                data={data}
-                                                width={100}
-                                                height={50}
-                                                options={options}
-                                            />
-                                        </Card.Text>
-                                    </Card>
-                                </Col>
-                            </Row>
-
-                            <Row style={{ marginTop: '50px' }}>
-                                <Col md={6}>
-                                    <Card>
-                                        <Card.Header>Latest 10 Students</Card.Header>
-                                        <Card.Text style={{ padding: '10px' }}>
+                                        <Card.Header>Students</Card.Header>
+                                        <Card.Text style={{ padding: '10px', minHeight: '400px' }}>
                                             <Table striped bordered hover size="sm">
                                                 <tbody>
                                                     <tr className="bg-dark text-white">
-                                                        <th>#</th>
                                                         <th>Name</th>
                                                         <th>Joined</th>
                                                         <th>Faculty</th>
@@ -237,12 +156,11 @@ export default class AdminDashboard extends Component {
 
                                 <Col md={6}>
                                     <Card>
-                                        <Card.Header>Latest 10 Instructors</Card.Header>
-                                        <Card.Text style={{ padding: '10px' }}>
+                                        <Card.Header>Instructors</Card.Header>
+                                        <Card.Text style={{ padding: '10px', minHeight: '400px' }}>
                                             <Table striped bordered hover size="sm">
                                                 <tbody>
                                                     <tr className="bg-dark text-white">
-                                                        <th>#</th>
                                                         <th>Name</th>
                                                         <th>Joined</th>
                                                         <th>Department</th>
@@ -256,6 +174,30 @@ export default class AdminDashboard extends Component {
                                         </Card.Text>
                                     </Card>
                                 </Col>
+                            </Row>
+
+                            <Row style={{ marginTop: '20px' }}>
+                                <Col md={12}>
+                                    <Card>
+                                        <Card.Header>Admins</Card.Header>
+                                        <Card.Text style={{ padding: '10px' }}>
+                                            <Table striped bordered hover size="sm">
+                                                <tbody>
+                                                    <tr className="bg-dark text-white">
+                                                        <th>Name</th>
+                                                        <th>Joined</th>
+                                                        <th>Faculty</th>
+                                                        <th>Verified</th>
+                                                    </tr>
+
+                                                    {this.state.admins}
+
+                                                </tbody>
+                                            </Table>
+                                        </Card.Text>
+                                    </Card>
+                                </Col>
+
                             </Row>
 
                         </Container>
