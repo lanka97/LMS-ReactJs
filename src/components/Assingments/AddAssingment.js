@@ -17,8 +17,7 @@ export class AddAssingmets extends React.Component {
 
         this.state = {
             deadLine: new Date(),
-            instructorId: '5cf27fc1d4506926f4b19245',
-            //props.instructorId,
+            instructorId: props.instructorId,
             // currentDeadLine: this.props.deadLine,
             // assgnmentName: "props.assingment.assgnmentName",
             // courseName: props.assingment.courseName,
