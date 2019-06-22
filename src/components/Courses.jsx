@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBCardText, MDBCardTitle, Button } from 'mdbreact';
+import { MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBCardText, MDBCardTitle, Button } from 'mdbreact';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
 import SweetAlert from 'sweetalert2';
+import Form from 'react-bootstrap/Form';
+import axios from 'axios';
 
 import {Link} from "react-router-dom";
 import '../CSS/course.css';
@@ -28,7 +30,9 @@ class Courses extends Component {
            faculty: '',
            department: '',
            instructor_id: '',
-           status: ''
+           status: '',
+           showAdd:'',
+           instructors:[]
         };
 
         this.handleDeleteShow = this.handleDeleteShow.bind(this);
@@ -39,6 +43,10 @@ class Courses extends Component {
         this.handleUpdateShow = this.handleUpdateShow.bind(this);
         this.handleUpdateClose = this.handleUpdateClose.bind(this);
         this.updateCourse =this.updateCourse.bind(this);
+        this.handleAddShow = this.handleAddShow.bind(this);
+        this.handleAddClose = this.handleAddClose.bind(this);
+        this.addCourse = this.addCourse.bind(this);
+        this.getInstructor = this.getInstructor.bind(this);
     }
 
     componentWillReceiveProps(){
@@ -46,7 +54,7 @@ class Courses extends Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/lms/course/all', {method: "GET"})
+        fetch('https://learnweb.appspot.com/lms/course/all', {method: "GET"})
         .then(res => res.json())
         .then(_data =>{
             console.log(_data);
@@ -80,8 +88,7 @@ class Courses extends Component {
 
     deleteCourse(id){
         console.log("delete", id);
-        fetch('http://localhost:8080/lms/course/remove/'+id, {method:'DELETE'})
-        .then(res => res.json())
+        axios.delete(`https://learnweb.appspot.com//lms/course/remove/${id}`)
         .then(_data =>{
             SweetAlert.fire({
                 title: "Success!!",
@@ -96,7 +103,7 @@ class Courses extends Component {
     }
 
     getCourseById(id){
-        fetch('http://localhost:8080/lms/course/getbyid/'+id, {method:"GET"})
+        fetch('https://learnweb.appspot.com/lms/course/getbyid/'+id, {method:"GET"})
         .then(res => res.json())
         .then(_course=>{
             this.setState({
@@ -128,7 +135,7 @@ class Courses extends Component {
             status: this.state.course.status
         };
 
-        fetch('http://localhost:8080/lms/course/update/'+this.state.rowId, {
+        fetch('https://learnweb.appspot.com/lms/course/update/'+this.state.rowId, {
             method: "PUT",
             body: JSON.stringify(body),
             headers :{
@@ -158,8 +165,6 @@ class Courses extends Component {
             showDelete: true,
             rowId: id 
         });
-
-
     }
 
     handleViewClose() {
@@ -178,7 +183,7 @@ class Courses extends Component {
     }
     
     handleUpdateShow(id) {
-        fetch('http://localhost:8080/lms/course/getbyid/'+id, {method:"GET"})
+        fetch('https://learnweb.appspot.com/lms/course/getbyid/'+id, {method:"GET"})
         .then(res => res.json())
         .then(_course=>{
             this.setState({
@@ -191,7 +196,7 @@ class Courses extends Component {
                 faculty: this.state.course.faculty,
                 department: this.state.course.department,
                 instructor_id: this.state.course.instructor_id,
-                status: this.state.course.status
+                status: this.state.course.status,
             });
             console.log(this.state.course);
         }).then(
@@ -200,6 +205,66 @@ class Courses extends Component {
                 rowId: id
             })
         );
+    }
+
+    addCourse(){
+        const body = {
+            course_id: this.refs.id.value,
+            name: this.refs.name.value,
+            description: this.refs.description.value,
+            enroll_key: this.refs.enrollkey.value,
+            credits: this.refs.credits.value,
+            faculty: this.refs.faculty.value,
+            department: this.refs.department.value,
+            instructor_id: this.refs.instructor_id.value,
+            status: "inactive"
+        };
+
+        fetch('https://learnweb.appspot.com/lms/course/add', {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers :{
+                "Content-Type": "application/json"
+            }
+        }).then(res =>{
+            SweetAlert.fire({
+                title: "Success!!",
+                text: "New course added successfully",
+                type: "success",
+                timer: 10000,
+                showConfirmButton: true
+            });
+            this.componentDidMount();
+            this.handleAddClose();
+        }).catch(err =>{
+            console.log(err);
+        });
+    }
+
+    getInstructor(e){
+        let value = e.target.value;
+        this.setState({
+            faculty: value
+        });
+
+        axios.get(`http://localhost:4200/user/instructor/${value}`)
+            .then(data=>{
+                data = data.data;
+                this.setState({
+                    instructors:data.users
+                })
+            });
+        console.log("faculty",value);
+    }
+
+    handleAddClose() {
+        this.setState({ showAdd: false });
+    }
+    
+    handleAddShow() {
+        this.setState({ 
+            showAdd: true,
+        })
     }
 
     handleInputChange(e) {
@@ -218,14 +283,11 @@ class Courses extends Component {
             <div>
                 
                 <div id="btn-div">
-                    <Link to='/AddCourse'><MDBBtn color="success" >Add New Course </MDBBtn></Link>
+                    <MDBBtn color="success" onClick={this.handleAddShow}>Add New Course </MDBBtn>
                 </div>
                 
                 <p className="h4 text-center mb-4">Courses</p>
-                
                     {this.state.courses}
-
-                    
 
                 <Modal show={this.state.showDelete} onHide={this.handleDeleteClose}>
                 <Modal.Header closeButton>
@@ -263,7 +325,7 @@ class Courses extends Component {
                     </Modal.Footer>
                 </Modal>   
 
-                <Modal show={this.state.showUpdate} onHide={this.handleUpdateClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+                <Modal show={this.state.showUpdate} onHide={this.handleUpdateClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered scrollable>
                     <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         Update Course
@@ -288,19 +350,23 @@ class Courses extends Component {
                             <br />
                             <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Select Faculty</label>
                             <br />
-                            <select value={this.state.faculty} onChange={e => this.handleInputChange(e)} ref="faculty">
-                                <option value="Computing">Computing</option>
-                                <option value="Business">Business</option>
-                                <option value="Engineering">Engineering</option>
-                            </select>
+                            <Form.Control as="select" ref="faculty" onChange={this.getInstructor}>
+                                    <option defaultValue="null">Select</option>
+                                    <option value="Computing">Computing</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Engineering">Engineering</option>
+                            </Form.Control>
                             <br />
                             <br />
                             <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Select Instructor</label>
                             <br />
-                            <select value={this.state.instructor_id} onChange={e => this.handleInputChange(e)} ref="instructor_id">
-                                <option value="Ins1">Ins1</option>
-                                <option value="Ins2">Ins2</option>
-                            </select>
+                            <Form.Control as="select" ref="instructor_id" onChange={this.getInstructor}>
+                                {this.state.instructors.map((value, index) => {
+                                    return (
+                                        <option key={index} value={value._id}>{value.fullname}</option>
+                                    )
+                                })}
+                            </Form.Control>
                             <br />
                             <br />
                             <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Department</label>
@@ -314,6 +380,62 @@ class Courses extends Component {
                     </div>
                     </Modal.Footer>
                 </Modal> 
+
+                <Modal show={this.state.showAdd} onHide={this.handleAddClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered scrollable>
+                    <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Add New Course
+                    </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    <form>
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Course ID</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" ref="id"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Course Name</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" ref="name"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Course Description</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" ref="description"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Enrollment Key</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" ref="enrollkey"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Credits</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" ref="credits"/>
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Select Faculty</label>
+                            <br />
+                            <Form.Control as="select" ref="faculty" onChange={this.getInstructor}>
+                                    <option defaultValue="null">Select</option>
+                                    <option value="Computing">Computing</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Engineering">Engineering</option>
+                            </Form.Control>
+                            <br />
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Select Instructor</label>
+                            <br />
+                            <Form.Control as="select" ref="instructor_id" onChange={this.getInstructor}>
+                                {this.state.instructors.map((value, index) => {
+                                    return (
+                                        <option key={index} value={value._id}>{value.fullname}</option>
+                                    )
+                                })}
+                            </Form.Control>
+                            <br />
+                            <br />
+                            <label htmlFor="defaultFormRegisterNameEx" className="grey-text">Enter Department</label>
+                            <input type="text" id="defaultFormRegisterNameEx" className="form-control" ref="department"/>
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    <div className="text-center mt-4">
+                            <MDBBtn className="button-margin" color="danger" onClick={this.handleAddClose}>Cancel</MDBBtn>
+                            <MDBBtn color="primary" className="button-margin" onClick={this.addCourse}>Add Course</MDBBtn>
+                    </div>
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }
