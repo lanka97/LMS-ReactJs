@@ -1,36 +1,58 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
 
 import './Header.css';
-import {faBell} from "@fortawesome/free-solid-svg-icons";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Signin from './signin';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {fn_getAssignmentsByStudentID} from "./functions/submission";
-
-export class Header extends React.Component {
+export class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: props.user,
-      notifications:[]
+      user: {}
     }
   }
 
+  componentDidMount() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.setState({
+        user: user
+      })
+    }
+
+  }
+
   showSinginButton() {
-    if (this.state.user) {
-      return (<div>
-        {this.state.user}
-      </div>);
+
+    if (localStorage.getItem('user')) {
+      console.log(this.state.user.username);
+      return (
+        <Navbar>
+          <Nav>
+            <NavDropdown title={this.state.user.username} id="nav-dropdown" className="active">
+              <NavDropdown.Item href="/user/profile">Profile</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Settings</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          <button className='btn btn-primary ml-3' onClick={this.onLogout}>Logout </button>
+        </Navbar>);
+
     } else {
-      return (<Link to='/login'>
-        <button className='btn btn-success' > Sign in </button>
-      </Link>);
+      return (
+        <div>
+          <Link to='/login'>
+            <button className='btn btn-primary mr-3' >Login </button>
+          </Link>
+          <Link to='/signup'>
+            <button className='btn btn-primary' >Signup </button>
+          </Link>
+        </div>
+      );
+
     }
   }
 
@@ -68,18 +90,34 @@ export class Header extends React.Component {
   }
 
   routeChange() {
-    this.props.history.push({ Signin });
+
+    let path = '/login';
+    console.log(path);
+    this.props.history.push('/login');
+
   }
 
   navbarItems() {
-    if (this.props.user === 'student') {
+    if (this.state.user.type === 'STUDENT') {
       return (
-        <Nav.Link href="/Courses"> <span className="navItem">Link</span></Nav.Link>
+        <Nav.Link href="/student/courses"> <span className="navItem">Courses</span></Nav.Link>
       );
     }
-    else {
 
+    if (this.state.user.type === 'INSTRUCTOR') {
+      return (
+        <Nav>
+          <Nav.Link href="/instructor/courses"> <span className="navItem">Courses</span></Nav.Link>
+          <Nav.Link href="/instructor/assignments"> <span className="navItem">Assignments</span></Nav.Link>
+        </Nav>
+      );
     }
+
+  }
+
+  onLogout() {
+    localStorage.clear();
+    this.props.history.push('/');
   }
 
   render() {
@@ -92,19 +130,9 @@ export class Header extends React.Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/home" > <span className="navItem">Home</span></Nav.Link>
-              <Nav.Link href="/assingments"> <span className="navItem">Assingments</span></Nav.Link>
-              {this.navbarItems()}
-              <NavDropdown title="Dropdown" id="nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
 
-            <Nav>
-              {this.showNotification()}
+              {this.navbarItems()}
+
             </Nav>
 
             <Form inline>
