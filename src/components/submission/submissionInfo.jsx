@@ -51,10 +51,12 @@ class submissionInfo extends Component{
 
             data = data.data;
 
+            let deadLine = new Date(data.deadLine);
+
             this.setState({
                 assignment:data.assgnmentName,
                 courseID:params.courseID,
-                dueDate:data.deadLine,
+                dueDate:deadLine,
                 uploadedAlert:this.props.location.state!== undefined ? this.props.location.state.upload : false,
                 assignmentDoc:data.doc
             });
@@ -234,7 +236,7 @@ class submissionInfo extends Component{
                     <div className="col-3">
                     </div>
                     <div className="col-6">
-                        {this.state.isActiveSubmission? addBtn : ''}
+                        {this.state.isActiveSubmission && this.state.status.grading === "Not Graded"? addBtn : ''}
                     </div>
                 </div>
 

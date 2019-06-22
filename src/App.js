@@ -9,6 +9,7 @@ import Signin from './components/signin';
 import submission from './components/submission/upload';
 import submissionInfo from './components/submission/submissionInfo';
 import notification from './components/submission/notifications';
+import viewCourse from './components/course/viewCourse';
 
 import './App.css';
 import viewAllSubmissions from "./components/submission/viewAllSubmissions";
@@ -37,6 +38,7 @@ export class App extends React.Component {
             <Route path='/course/:courseID/assignment/:assignment/upload' component={submission} />
             <Route path='/course/:courseID/assignment/:assignment/view/:viewType' component={viewAllSubmissions} />
             <Route exact path='/notifications' component={notification} />
+            <Route exact path='/course/:id' component={viewCourse} />
           </div>
         </BrowserRouter>
       </div>

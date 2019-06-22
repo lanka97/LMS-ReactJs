@@ -11,7 +11,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDownload,faQuestionCircle} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import Button from 'react-bootstrap/Button'
-import {HashLoader as Spinner} from 'react-spinners';
+import {ScaleLoader as Spinner} from 'react-spinners';
 
 var regexp = /^\d+(\.\d{1,2})?$/;
 
@@ -214,11 +214,10 @@ class viewAllSubmissions extends Component{
 
         let loading = (
             <div className="row mt-5">
-                <div className="col-4"></div>
+                <div className="col-4"/>
                 <div className="col-4 mt-5">
                         <Spinner
                             size={90}
-                            margin={2}
                             color={'#123abc'}
                             loading={this.state.sidePanel === "loading"}/>
 
