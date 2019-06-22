@@ -45,7 +45,7 @@ class InstructorPage extends Component {
     }
 
     getCourses() {
-        fetch('http://localhost:4200/lms/course/filterbyinstructorstatus/5cf27fc1d4506926f4b19245/active', { method: "GET" })
+        fetch('https://learwebnode.appspot.com/lms/course/filterbyinstructorstatus/5cf27fc1d4506926f4b19245/active', { method: "GET" })
             .then(res => res.json())
             .then(_data => {
                 console.log(_data);
@@ -79,7 +79,7 @@ class InstructorPage extends Component {
     }
 
     getNewCourses() {
-        fetch('http://localhost:4200/lms/course/filterbyinstructorstatus/5cf27fc1d4506926f4b19245/inactive', { method: "GET" })
+        fetch('https://learwebnode.appspot.com/lms/course/filterbyinstructorstatus/5cf27fc1d4506926f4b19245/inactive', { method: "GET" })
             .then(res => res.json())
             .then(_data => {
                 var x = _data.courses
@@ -122,7 +122,7 @@ class InstructorPage extends Component {
         }
 
         console.log(id, status);
-        fetch('http://localhost:4200/lms/course/changestatus/' + id, {
+        fetch('https://learwebnode.appspot.com/lms/course/changestatus/' + id, {
             method: "PUT",
             body: JSON.stringify(body),
             headers: {

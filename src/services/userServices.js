@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const apiNodeURL = 'http://localhost:4200/user';
-const apiSpringURL = 'http://localhost:8080/lms/user';
+const apiNodeURL = 'https://learwebnode.appspot.com/user';
+const apiSpringURL = 'https://learnweb.appspot.com/lms/user';
 
 
 export const loginUser = (user) => {

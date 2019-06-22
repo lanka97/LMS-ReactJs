@@ -249,7 +249,7 @@ class Courses extends Component {
             faculty: value
         });
 
-        axios.get(`http://localhost:4200/user/instructor/${value}`)
+        axios.get(`https://learwebnode.appspot.com/user/instructor/${value}`)
             .then(data => {
                 data = data.data;
                 this.setState({

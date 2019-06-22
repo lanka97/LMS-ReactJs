@@ -53,7 +53,7 @@ class Courses extends Component {
     }
 
     getCourses() {
-        fetch('http://localhost:4200/lms/studentCourse/getAllById/5cf2787cd4506907ec6870c0', { method: "GET" })
+        fetch('https://learwebnode.appspot.com/lms/studentCourse/getAllById/5cf2787cd4506907ec6870c0', { method: "GET" })
             .then(res => res.json())
             .then(_data => {
                 console.log(_data);
@@ -81,7 +81,7 @@ class Courses extends Component {
 
     removeCourse(id) {
         console.log("delete", id);
-        axios.delete(`http://localhost:4200/lms/studentCourse/unenroll/${id}`)
+        axios.delete(`https://learwebnode.appspot.com/lms/studentCourse/unenroll/${id}`)
             .then(_data => {
                 SweetAlert.fire({
                     title: "Unenrolled!!",
@@ -107,7 +107,7 @@ class Courses extends Component {
     }
 
     getActiveCourses() {
-        fetch('http://localhost:4200/lms/course/filterbyfacultystatus/Computing/active', { method: "GET" })
+        fetch('https://learwebnode.appspot.com/lms/course/filterbyfacultystatus/Computing/active', { method: "GET" })
             .then(res => res.json())
             .then(_data => {
                 console.log(_data);
@@ -201,7 +201,7 @@ class Courses extends Component {
             "courseName": this.state.name
         }
         if (this.state.e_key == key) {
-            fetch('http://localhost:4200/lms/studentCourse/enroll', {
+            fetch('https://learwebnode.appspot.com/lms/studentCourse/enroll', {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: {
