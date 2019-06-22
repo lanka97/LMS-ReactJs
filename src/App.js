@@ -13,7 +13,6 @@ import Profile from './components/user/Profile';
 import AdminSideBar from './components/admin/AdminSideBar';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AddUser from './components/admin/AddUser';
-import InstructorSideBar from './components/instructor/InstructorSideBar';
 import InstructorDashboard from './components/instructor/InstructorDashboard';
 
 import './App.css';
@@ -47,7 +46,7 @@ function AdminRoute({ component: Component, ...rest }) {
   return (
     <Route {...rest} render={props => {
 
-      if (user && user.type == "ADMIN") {
+      if (user && user.type === "ADMIN") {
         return <Component {...props} />;
       } else {
         return (
@@ -70,7 +69,7 @@ function StudentRoute({ component: Component, ...rest }) {
   return (
     <Route {...rest} render={props => {
 
-      if (user && user.type == "STUDENT") {
+      if (user && user.type === "STUDENT") {
         return <Component {...props} />;
       } else {
         return (
@@ -93,7 +92,7 @@ function InstructorRoute({ component: Component, ...rest }) {
   return (
     <Route {...rest} render={props => {
 
-      if (user && user.type == "INSTRUCTOR") {
+      if (user && user.type === "INSTRUCTOR") {
         return <Component {...props} />;
       } else {
         return (
@@ -149,11 +148,7 @@ export class App extends Component {
   componentDidMount() {
 
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      console.log('logged check');
 
-      console.log(this.state.isLogged + this.state.fuck);
-    }
   }
 
 

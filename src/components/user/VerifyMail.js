@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
 
-import { Alert, Container, Form, Col, InputGroup, Button, Card, ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
+import { Alert, Container, Form, Col, InputGroup, Button, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 

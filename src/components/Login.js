@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Route, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container, Form, Col, InputGroup, Button, Row, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';

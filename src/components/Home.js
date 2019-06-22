@@ -20,7 +20,7 @@ export class Home extends React.Component {
         <Fade {...fadeProperties}>
           <div className="each-fade">
             <div className="image-container">
-              <img src={secondImg} width={'100%'} height={550} mode='fit' alt="One" />
+              <img src={firstImg} width={'100%'} height={550} mode='fit' alt="One" />
             </div>
           </div>
           <div className="each-fade">

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Container, Form, Row, Col, Table, InputGroup, Button, Card, ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLock, faEnvelope, faPhone, faMale, faFemale } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPhone, faMale, faFemale } from '@fortawesome/free-solid-svg-icons';
 
 import { updateUser } from '../../services/userServices';
 
