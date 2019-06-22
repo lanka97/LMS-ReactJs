@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 
-import SideBar from './SideBar';
-import { Bar, Line, Doughnut, Pie, Bubble, Scatter } from 'react-chartjs-2';
+import AdminSideBar from './InstructorSideBar';
+import { Bar, Pie } from 'react-chartjs-2';
 
 
-export default class Dashboard extends Component {
+export default class InstructorDashboard extends Component {
 
     constructor(props) {
         super(props);
@@ -108,7 +108,7 @@ export default class Dashboard extends Component {
 
             <Container fluid={1} style={{ fontSize: '14px' }}>
                 <Row>
-                    <SideBar />
+                    <AdminSideBar />
                     <Col style={{ padding: 0 }}>
                         <Container style={{ padding: '20px' }}>
                             {/* <h2>Dashboard</h2> */}
