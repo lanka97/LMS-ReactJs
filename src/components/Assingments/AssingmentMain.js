@@ -30,7 +30,7 @@ export class AssingmetsMain extends React.Component {
 
         this.state = {
             show: false,
-            instructorId: "Ins2"
+            instructorId: "5cf27fc1d4506926f4b19245"
         };
 
         // this.deleteAssingment.bind(this);
@@ -41,7 +41,7 @@ export class AssingmetsMain extends React.Component {
     handleCloseAdd() {
         this.setState({ showAdd: false });
         this.componentDidMount();
-        this.componentDidMount(); 
+        setTimeout(this.componentDidMount(),3000);
     }
 
     handleShowAdd() {
@@ -55,7 +55,8 @@ export class AssingmetsMain extends React.Component {
     handleCloseUpdate() {
         this.setState({ showUpdate: false });
         this.componentDidMount();
-        this.componentDidMount(); 
+        this.componentDidMount();
+        setTimeout(this.componentDidMount(),3000);
     }
 
     handleShowUpdate( assingment ) {
@@ -131,7 +132,7 @@ export class AssingmetsMain extends React.Component {
 
             for(const assingment of _data){
                 _assingments.push(
-                    <div id="card-list" key = { assingment.id }>
+                    <div id="card-list" key = { assingment._id }>
                         <MDBCard id="divcard" key={assingment.id}>
                             <MDBCardHeader><h3>{assingment.assgnmentName}</h3></MDBCardHeader>
                             <MDBCardBody>
@@ -144,6 +145,7 @@ export class AssingmetsMain extends React.Component {
                                     </a>
                                 </MDBCardText>
                                 {/* <Button className = "btn btn-primary">View assingment</Button> */}
+                                <a className = "btn btn-primary m-2 bg-primary" href={`/course/${assingment.courseName}/assignment/${assingment.assgnmentName}/view/all`}>Add Grading</a>
                                 <Button className = "btn btn-success m-2" onClick={ () => { this.handleShowUpdate( assingment ) } }>Edit assingment</Button>
                                 <Button className = "btn btn-danger m-2" onClick = { () => {this.deleteAssingment( assingment._id ) } }>Delete assingment</Button>
                             </MDBCardBody>
