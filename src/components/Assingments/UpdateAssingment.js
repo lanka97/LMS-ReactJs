@@ -52,7 +52,8 @@ export class UpdateAssingmets extends React.Component{
   }
 
   onFormSubmit() {
-          
+ 
+  if(this.state.description && this.state.assgnmentName){  
     Swal.fire({
         title: 'Are you sure?',
         text: 'Are you sure, Do you want to Update the Assignment!',
@@ -108,6 +109,13 @@ export class UpdateAssingmets extends React.Component{
           this.componentDidMount(); 
         }
       })
+    } else {
+        Swal.fire(
+            'Cancelled',
+            'Can not Proceed without the required Details!',
+            'error'
+          )
+    }
 }
 
   render(){
