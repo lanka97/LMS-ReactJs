@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter, Redirect } from 'react-router-dom';
+import AssingmentMain from './components/Assingments/AssingmentMain'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -10,15 +11,19 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import VerifyMail from './components/user/VerifyMail';
 import Profile from './components/user/Profile';
-import AdminSideBar from './components/admin/AdminSideBar';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AddUser from './components/admin/AddUser';
 import InstructorDashboard from './components/instructor/InstructorDashboard';
 import Courses from './components/admin/Courses';
 import InstructorCourses from './components/instructor/InstructorCourses';
 import StudentCourses from './components/student/StudentCourses';
+import submission from './components/submission/upload';
+import submissionInfo from './components/submission/submissionInfo';
+import notification from './components/submission/notifications';
+import viewCourse from './components/course/viewCourse';
 
 import './App.css';
+import viewAllSubmissions from "./components/submission/viewAllSubmissions";
 
 const user = JSON.parse(localStorage.getItem('user'));
 
@@ -220,7 +225,12 @@ export class App extends Component {
 
             <AuthRoute exact path='/user/profile' component={Profile} />
 
-
+            <InstructorRoute exact path='/assingments' component={AssingmentMain} />
+            <StudentRoute path='/course/:courseID/assignment/:assignment/status' component={submissionInfo} />
+            <StudentRoute path='/course/:courseID/assignment/:assignment/upload' component={submission} />
+            <InstructorRoute path='/course/:courseID/assignment/:assignment/view/:viewType' component={viewAllSubmissions} />
+            <StudentRoute exact path='/notifications' component={notification} />
+            <StudentRoute exact path='/course/:name' component={viewCourse} />
           </div>
         </BrowserRouter>
       </div>

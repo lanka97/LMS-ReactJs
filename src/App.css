@@ -35,3 +35,19 @@
     transform: rotate(360deg);
   }
 }
+.cursor-pointer{
+  cursor: pointer !important;
+}
+.center-screen {
+  margin-top: -100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+.course-card{
+  border: none;
+  border-left: darkgoldenrod solid 5px;
+}

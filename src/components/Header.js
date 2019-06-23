@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { fn_getAssignmentsByStudentID } from "./functions/submission";
 
 import './Header.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,7 +12,8 @@ export class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: {},
+      notifications: []
     }
   }
 
@@ -19,8 +23,34 @@ export class Header extends Component {
       this.setState({
         user: user
       })
+
+      fn_getAssignmentsByStudentID(user._id)
+        .then(data => {
+          this.setState({
+            notifications: data.data,
+          })
+        })
     }
 
+  }
+
+  showNotification() {
+    let icon = (<FontAwesomeIcon icon={faBell} className="notification" />);
+    return (
+      <div className="mr-2">
+        <NavDropdown title={icon} id={"noti"}>
+
+          {this.state.notifications.map((value, index) => {
+            return (
+              <NavDropdown.Item href={`/course/${value.courseId}`} className="bg-secondary">
+                Your <span className="font-weight-bold">{value.assigmentName}</span> marks has been updated and you got
+                    <span className="font-italic"> {value.marks} </span> mark({value.courseId})
+                  </NavDropdown.Item>
+            )
+          })}
+        </NavDropdown>
+      </div>
+    );
   }
 
   showSinginButton() {
@@ -29,6 +59,7 @@ export class Header extends Component {
       console.log(this.state.user.username);
       return (
         <Navbar>
+          {this.showNotification()}
           <Nav>
             <NavDropdown title={this.state.user.username} id="nav-dropdown" className="active">
               <NavDropdown.Item href="/user/profile">Profile</NavDropdown.Item>
@@ -51,11 +82,6 @@ export class Header extends Component {
     }
   }
 
-  navSignIn() {
-    console.log("ssssssssss");
-    return (<Redirect to="/" />);
-  }
-
   routeChange() {
     let path = '/login';
     console.log(path);
@@ -65,7 +91,11 @@ export class Header extends Component {
   navbarItems() {
     if (this.state.user.type === 'STUDENT') {
       return (
+
+
         <Nav.Link href="/student/courses"> <span className="navItem">Courses</span></Nav.Link>
+
+
       );
     }
 
@@ -73,7 +103,7 @@ export class Header extends Component {
       return (
         <Nav>
           <Nav.Link href="/instructor/courses"> <span className="navItem">Courses</span></Nav.Link>
-          <Nav.Link href="/instructor/assignments"> <span className="navItem">Assignments</span></Nav.Link>
+          <Nav.Link href="/assingments"> <span className="navItem">Assingments</span></Nav.Link>
         </Nav>
       );
     }
@@ -88,16 +118,16 @@ export class Header extends Component {
   render() {
     return (
       <div>
-
         <Navbar expand="lg" bg="primary" variant="dark">
           <Navbar.Brand href="/home">
-            <span className="navItem">SLIT</span></Navbar.Brand>
+            <span className="navItem">ISE</span></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/home" > <span className="navItem">Home</span></Nav.Link>
               {this.navbarItems()}
             </Nav>
+
             <Form inline>
               <span className="navItem">{this.showSinginButton()}</span>
             </Form>

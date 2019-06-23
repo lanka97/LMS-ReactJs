@@ -65,7 +65,7 @@ class Courses extends Component {
                             <MDBCard id="divcard">
                                 <MDBCardHeader><h3>{course.courseName}</h3></MDBCardHeader>
                                 <MDBCardBody>
-                                    <a className="button-margin btn btn-success text-white"  >View Course</a>
+                                    <a href={`/course/${course.courseName}`} className="button-margin btn btn-success text-white"  >View Course</a>
                                     <Button className="button-margin" color="danger" onClick={() => this.handleremoveShow(course._id)}>Unenroll Course</Button>
                                 </MDBCardBody>
                             </MDBCard>
