@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 import React, { Component } from 'react';
 import { Route, BrowserRouter, Redirect } from 'react-router-dom';
 import AssingmentMain from './components/Assingments/AssingmentMain'
+=======
+
+import React, { Component } from 'react';
+import { Route, BrowserRouter, Redirect } from 'react-router-dom';
+
+>>>>>>> b138cbdb13a7f7556b54c903e7f455c377925d9d
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
 import Home from './components/Home';
 import Header from './components/Header';
+<<<<<<< HEAD
+=======
+
+>>>>>>> b138cbdb13a7f7556b54c903e7f455c377925d9d
 import Login from './components/Login';
 import Signup from './components/Signup';
 import VerifyMail from './components/user/VerifyMail';
@@ -17,10 +28,14 @@ import InstructorDashboard from './components/instructor/InstructorDashboard';
 import Courses from './components/admin/Courses';
 import InstructorCourses from './components/instructor/InstructorCourses';
 import StudentCourses from './components/student/StudentCourses';
+<<<<<<< HEAD
 import submission from './components/submission/upload';
 import submissionInfo from './components/submission/submissionInfo';
 import notification from './components/submission/notifications';
 import viewCourse from './components/course/viewCourse';
+=======
+
+>>>>>>> b138cbdb13a7f7556b54c903e7f455c377925d9d
 
 import './App.css';
 import viewAllSubmissions from "./components/submission/viewAllSubmissions";
@@ -208,6 +223,10 @@ export class App extends Component {
 
             <Route path="/" component={Header} />
             <Route exact path='/' component={Home} />
+<<<<<<< HEAD
+=======
+
+>>>>>>> b138cbdb13a7f7556b54c903e7f455c377925d9d
             <HomeRoute exact path='/home' component={Home} />
 
             <GuestRoute exact path='/login' component={Login} />
@@ -225,12 +244,16 @@ export class App extends Component {
 
             <AuthRoute exact path='/user/profile' component={Profile} />
 
+<<<<<<< HEAD
             <InstructorRoute exact path='/assingments' component={AssingmentMain} />
             <StudentRoute path='/course/:courseID/assignment/:assignment/status' component={submissionInfo} />
             <StudentRoute path='/course/:courseID/assignment/:assignment/upload' component={submission} />
             <InstructorRoute path='/course/:courseID/assignment/:assignment/view/:viewType' component={viewAllSubmissions} />
             <StudentRoute exact path='/notifications' component={notification} />
             <StudentRoute exact path='/course/:name' component={viewCourse} />
+=======
+
+>>>>>>> b138cbdb13a7f7556b54c903e7f455c377925d9d
           </div>
         </BrowserRouter>
       </div>

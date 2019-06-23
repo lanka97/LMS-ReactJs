@@ -6,6 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fn_getAssignmentsByStudentID } from "./functions/submission";
 
 import './Header.css';
+<<<<<<< HEAD
+=======
+
+>>>>>>> b138cbdb13a7f7556b54c903e7f455c377925d9d
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export class Header extends Component {
@@ -79,13 +83,16 @@ export class Header extends Component {
           </Link>
         </div>
       );
+
     }
   }
 
   routeChange() {
+
     let path = '/login';
     console.log(path);
     this.props.history.push('/login');
+
   }
 
   navbarItems() {
@@ -125,7 +132,9 @@ export class Header extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/home" > <span className="navItem">Home</span></Nav.Link>
+
               {this.navbarItems()}
+
             </Nav>
 
             <Form inline>
