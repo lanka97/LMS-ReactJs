@@ -14,6 +14,7 @@ export default class Signup extends Component {
     this.handleGender = this.handleGender.bind(this);
     this.handleFaculty = this.handleFaculty.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
+    this.handleEmail = this.handleEmail.bind(this);
     this.validateUser = this.validateUser.bind(this);
     this.getUser = this.getUser.bind(this);
     this.sendEmail = this.sendEmail.bind(this);
@@ -43,6 +44,7 @@ export default class Signup extends Component {
   componentDidMount() {
 
     const untemp = [];
+    const emailtemp = [];
 
     getUsers()
       .then(res => {
@@ -50,9 +52,11 @@ export default class Signup extends Component {
           res = res.data;
           for (const user of res.users) {
             untemp.push(user.username);
+            emailtemp.push(user.email);
           }
           this.setState({
-            usernames: untemp
+            usernames: untemp,
+            emails: emailtemp
           });
         } else {
           this.setState({ message: 'Something went wrong' });
@@ -93,6 +97,29 @@ export default class Signup extends Component {
         this.setState({
           error: false,
           message: 'Username available'
+        });
+      }
+    }
+
+  }
+
+  handleEmail(event) {
+    const currentEmail = event.target.value;
+    const emails = this.state.emails;
+
+    for (const email of emails) {
+      if (email === currentEmail) {
+        this.setState({
+          error: true,
+          message: 'Email unavailable'
+        });
+        this.displayError();
+        console.log()
+        return;
+      } else {
+        this.setState({
+          error: false,
+          message: 'Email available'
         });
       }
     }
@@ -307,6 +334,7 @@ export default class Signup extends Component {
                         aria-describedby="inputGroupPrepend"
                         required
                         ref="email"
+                        onChange={this.handleEmail}
                       />
                       <Form.Control.Feedback type="invalid">
                         Please choose an email.

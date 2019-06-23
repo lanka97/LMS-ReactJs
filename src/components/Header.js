@@ -32,9 +32,6 @@ export class Header extends Component {
           <Nav>
             <NavDropdown title={this.state.user.username} id="nav-dropdown" className="active">
               <NavDropdown.Item href="/user/profile">Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Settings</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <button className='btn btn-primary ml-3' onClick={this.onLogout}>Logout </button>
