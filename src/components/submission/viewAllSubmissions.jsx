@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React, { Component } from 'react'
 import {
     fn_getAllSubmissionByCourseAndAssignment,
     fn_getSpecificSubmissionInfo,
@@ -7,34 +7,34 @@ import {
 
 import { MDBDataTable } from 'mdbreact';
 import Badge from "react-bootstrap/Badge";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDownload,faQuestionCircle} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import Button from 'react-bootstrap/Button'
-import {ScaleLoader as Spinner} from 'react-spinners';
+import { ScaleLoader as Spinner } from 'react-spinners';
 
 var regexp = /^\d+(\.\d{1,2})?$/;
 
-class viewAllSubmissions extends Component{
+class viewAllSubmissions extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            submissions:[],
-            assignmentName:"",
-            update:{
-                row:"",
-                studentID:"",
-                file:"",
+        this.state = {
+            submissions: [],
+            assignmentName: "",
+            update: {
+                row: "",
+                studentID: "",
+                file: "",
                 assignment: "",
                 uploadedDate: "",
-                id:""
+                id: ""
             },
-            sidePanel:null,
-            sideButton:"Save Changes",
-            pageLoading:true,
-            mark:"",
-            isError:true,
+            sidePanel: null,
+            sideButton: "Save Changes",
+            pageLoading: true,
+            mark: "",
+            isError: true,
         };
         this.handleRowClick = this.handleRowClick.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -45,7 +45,7 @@ class viewAllSubmissions extends Component{
         this.loadTable();
         let viewType = this.props.match.params.viewType;
 
-        if(viewType !== "all" && viewType !== "marked" && viewType !== "unmarked"){
+        if (viewType !== "all" && viewType !== "marked" && viewType !== "unmarked") {
             let courseID = this.props.match.params.courseID;
             let assignment = this.props.match.params.assignment;
             this.props.history.push(`/course/${courseID}/assignment/${assignment}/view/all`)
@@ -53,86 +53,86 @@ class viewAllSubmissions extends Component{
 
     }
 
-    loadTable(){
+    loadTable() {
         let courseID = this.props.match.params.courseID;
         let assignment = this.props.match.params.assignment;
-        fn_getAllSubmissionByCourseAndAssignment(courseID,assignment).then(data=>{
+        fn_getAllSubmissionByCourseAndAssignment(courseID, assignment).then(data => {
             data = data.data;
             this.setState({
-                submissions:data,
-                pageLoading:false,
-                assignmentName:assignment
+                submissions: data,
+                pageLoading: false,
+                assignmentName: assignment
             })
         })
     }
 
-    onChange(e){
+    onChange(e) {
 
         this.setState({
-            [e.target.name]:e.target.value,
-            isError : !regexp.test(e.target.value)
+            [e.target.name]: e.target.value,
+            isError: !regexp.test(e.target.value)
         });
 
     }
 
-    updateMarks(){
+    updateMarks() {
 
         let payload = new FormData();
-        payload.set('marks',this.state.mark);
-        payload.set('isViewed','false');
+        payload.set('marks', this.state.mark);
+        payload.set('isViewed', 'false');
 
         let id = this.state.update.id;
 
         this.setState({
-            sideButton:"Updating..."
+            sideButton: "Updating..."
         });
 
-        fn_updateAssignmentMarks(id,payload)
-            .then((data)=>{
+        fn_updateAssignmentMarks(id, payload)
+            .then((data) => {
                 let submissions = this.state.submissions;
 
                 submissions[this.state.update.row] = data.data;
 
                 this.setState({
-                    sideButton:"Save Changes",
-                    submissions : submissions,
-                    mark:""
+                    sideButton: "Save Changes",
+                    submissions: submissions,
+                    mark: ""
                 });
 
-            }).catch(()=>{
-            this.setState({
-                sideButton:"Save Changes"
-            });
-        })
+            }).catch(() => {
+                this.setState({
+                    sideButton: "Save Changes"
+                });
+            })
 
 
     }
 
-    handleRowClick(row,value,event){
+    handleRowClick(row, value, event) {
 
         this.setState({
-            sidePanel:"loading"
+            sidePanel: "loading"
         });
 
         let payload = {
-            assignment:value.assigmentName,
-            courseID:value.courseId,
-            studentID:value.studentId
+            assignment: value.assigmentName,
+            courseID: value.courseId,
+            studentID: value.studentId
         };
 
-        fn_getSpecificSubmissionInfo(payload).then(data=>{
+        fn_getSpecificSubmissionInfo(payload).then(data => {
 
             data = data.data;
 
             this.setState({
-                sidePanel:"showing",
-                update:{
-                    row:row,
-                    studentID:data.studentId,
-                    file:data.file,
+                sidePanel: "showing",
+                update: {
+                    row: row,
+                    studentID: data.studentId,
+                    file: data.file,
                     assignment: data.assigmentName,
                     uploadedDate: data.createdAt,
-                    id:data.id
+                    id: data.id
                 }
             })
         })
@@ -175,7 +175,7 @@ class viewAllSubmissions extends Component{
                         <p>File</p>
                     </div>
                     <div className="col-6">
-                        <a href={process.env.REACT_APP_SPRING_API+"/lms/submission/download/"+this.state.update.file}><Badge pill variant="primary">Download<FontAwesomeIcon icon={faDownload}/></Badge></a>
+                        <a href={process.env.REACT_APP_SPRING_API + "/lms/submission/download/" + this.state.update.file}><Badge pill variant="primary">Download<FontAwesomeIcon icon={faDownload} /></Badge></a>
                     </div>
                 </div>
 
@@ -184,9 +184,9 @@ class viewAllSubmissions extends Component{
                         <p>Marks</p>
                     </div>
                     <div className="col-6">
-                        <input className={this.state.isError ? 'border-danger':''} type="text" name="mark" onChange={this.onChange} value={this.state.mark}/>
-                        <br/>
-                        {this.state.isError ?<span className="text-danger">Please Enter a numeric value</span>:''}
+                        <input className={this.state.isError ? 'border-danger' : ''} type="text" name="mark" onChange={this.onChange} value={this.state.mark} />
+                        <br />
+                        {this.state.isError ? <span className="text-danger">Please Enter a numeric value</span> : ''}
                     </div>
                 </div>
 
@@ -201,7 +201,7 @@ class viewAllSubmissions extends Component{
                 <div className="col-4"></div>
                 <div className="col-4">
                     <span className="ml-2">
-                        <FontAwesomeIcon icon={faQuestionCircle} size="6x"/>
+                        <FontAwesomeIcon icon={faQuestionCircle} size="6x" />
                     </span>
                     <h6 className="mt-2">
                         Please Select Row
@@ -214,15 +214,15 @@ class viewAllSubmissions extends Component{
 
         let loading = (
             <div className="row mt-5">
-                <div className="col-4"/>
+                <div className="col-4" />
                 <div className="col-4 mt-5">
-                        <Spinner
-                            size={90}
-                            color={'#123abc'}
-                            loading={this.state.sidePanel === "loading"}/>
+                    <Spinner
+                        size={90}
+                        color={'#123abc'}
+                        loading={this.state.sidePanel === "loading"} />
 
-                            <h5 className="ml-2 mt-2">
-                                Loading...
+                    <h5 className="ml-2 mt-2">
+                        Loading...
                             </h5>
                 </div>
 
@@ -258,23 +258,23 @@ class viewAllSubmissions extends Component{
 
                 let viewType = this.props.match.params.viewType;
 
-                if(viewType === "unmarked" && value.marks !== 0)
+                if (viewType === "unmarked" && value.marks !== 0)
                     return false;
 
-                if(viewType === "marked" && value.marks === 0)
+                if (viewType === "marked" && value.marks === 0)
                     return false;
 
                 return {
-                    "studentID":value.studentId,
-                    "marks":value.marks===0?'Not Graded' : value.marks,
-                    "uploadedDate":moment(value.createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMMM Do YYYY, hh:mm a'),
-                    "download":<a href={process.env.REACT_APP_SPRING_API+"/lms/submission/download/"+value.file}><Badge pill variant="secondary">Download<FontAwesomeIcon icon={faDownload}/></Badge></a>,
-                    clickEvent: this.handleRowClick.bind(this,index,value)
+                    "studentID": value.studentId,
+                    "marks": value.marks === 0 ? 'Not Graded' : value.marks,
+                    "uploadedDate": moment(value.createdAt, 'YYYY-MM-DD HH:mm:ss').format('MMMM Do YYYY, hh:mm a'),
+                    "download": <a href={process.env.REACT_APP_SPRING_API + "/lms/submission/download/" + value.file}><Badge pill variant="secondary">Download<FontAwesomeIcon icon={faDownload} /></Badge></a>,
+                    clickEvent: this.handleRowClick.bind(this, index, value)
                 }
             })
         };
 
-        const content=(
+        const content = (
             <div className="row">
                 <div className="col-6">
                     <MDBDataTable
@@ -306,7 +306,7 @@ class viewAllSubmissions extends Component{
                 <Spinner
                     size={120}
                     color={'#123abc'}
-                    loading={this.state.pageLoading}/>
+                    loading={this.state.pageLoading} />
 
                 <h3 className="ml-2 mt-3">
                     Loading...
@@ -314,7 +314,7 @@ class viewAllSubmissions extends Component{
             </div>
         );
 
-        return(
+        return (
             <div className="container">
                 <div className="h2 mt-2">{this.state.assignmentName.charAt(0).toUpperCase() + this.state.assignmentName.substring(1).toLowerCase()}</div>
 

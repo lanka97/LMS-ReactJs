@@ -1,24 +1,25 @@
-import React,{Component} from 'react'
-import {fn_getAssignmentsByStudentID} from "../functions/submission";
-import {ScaleLoader as Loader} from 'react-spinners';
+import React, { Component } from 'react'
+import { fn_getAssignmentsByStudentID } from "../functions/submission";
+import { ScaleLoader as Loader } from 'react-spinners';
 
-class notifications extends Component{
+class notifications extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            submissions:[],
-            isLoading:true
+            submissions: [],
+            isLoading: true
         }
     }
 
     componentDidMount() {
-        let studentID = "IT17102674";
-        fn_getAssignmentsByStudentID(studentID)
-            .then(data=>{
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        fn_getAssignmentsByStudentID(user._id)
+            .then(data => {
                 this.setState({
-                    submissions:data.data,
-                    isLoading:false
+                    submissions: data.data,
+                    isLoading: false
                 })
             })
     }
@@ -30,21 +31,21 @@ class notifications extends Component{
                     size={250}
                     color={'#123abc'}
                     loading={this.state.isLoading}
-                    />
-                    <h5>Loading...</h5>
+                />
+                <h5>Loading...</h5>
             </div>
         );
-        return(
+        return (
             <div className="container">
-                {this.state.isLoading? loader
+                {this.state.isLoading ? loader
                     :
 
                     this.state.submissions.map((value, index, array) => {
 
-                        if(value.marks ===0)
+                        if (value.marks === 0)
                             return false;
 
-                        return(
+                        return (
                             <a href={`/course/${value.courseId}`} className="text-decoration-none" key={index}>
                                 <div className={value.viewed ? 'card mt-3 bg-default' : 'card mt-3 bg-light'} >
                                     <div className="card-body text-dark">
