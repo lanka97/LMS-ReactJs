@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
-=======
-
->>>>>>> b138cbdb13a7f7556b54c903e7f455c377925d9d
     "@coreui/coreui": "^2.1.12",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-regular-svg-icons": "^5.9.0",
@@ -18,7 +14,6 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "dateformat": "^3.0.3",
-
     "mdbreact": "^4.15.0",
     "moment": "^2.24.0",
     "react": "^16.8.6",
@@ -26,7 +21,6 @@
     "react-chartjs-2": "^2.7.6",
     "react-bootstrap-date-picker": "^5.1.0",
     "react-datepicker": "^2.7.0",
-
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
@@ -35,7 +29,6 @@
     "sweetalert2": "^8.13.0",
     "react-spinners": "^0.5.4",
     "sweetalert": "^2.1.2"
-
   },
   "scripts": {
     "start": "react-scripts start",
